@@ -127,7 +127,7 @@ static MNGModalWindowManager *_manager = nil;
     if (equalityTest == MNGModalAnimationNone) {
         animationsBlock();
     }else{
-        [UIView animateWithDuration:0.5f animations:^{
+        [UIView animateWithDuration:0.4f animations:^{
             animationsBlock();
         } completion:^(BOOL finished) {
             if (completion) {
