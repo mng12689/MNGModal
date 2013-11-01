@@ -9,7 +9,7 @@
 #import "ButtonViewController.h"
 #import "UIViewController+CustomModals.h"
 
-@interface ButtonViewController ()
+@interface ButtonViewController () <MNGModalProtocol>
 
 @property (nonatomic,strong) UISegmentedControl *segControl;
 @property (nonatomic,strong) NSArray *animationOptions;
@@ -148,6 +148,11 @@
     [button setSelected:self.shouldDarken];
     UIColor *backgroundColor = button.selected ? [UIColor blueColor] : [UIColor whiteColor];
     [button setBackgroundColor:backgroundColor];
+}
+
+-(void)tapDetectedOutsideModal:(UITapGestureRecognizer *)tapGestureRecognizer
+{
+    [self dismissModalViewControllerWithCompletion:nil];
 }
 
 @end

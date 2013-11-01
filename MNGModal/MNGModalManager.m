@@ -7,6 +7,7 @@
 //
 
 #import "MNGModalManager.h"
+#import "MNGModalProtocol.h"
 
 @interface MNGModalManager ()
 
@@ -51,6 +52,7 @@ static MNGModalManager *_manager = nil;
         _dimmingView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, mainWindow.bounds.size.width, mainWindow.bounds.size.height)];
         _dimmingView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
         _dimmingView.backgroundColor = [UIColor clearColor];
+        [_dimmingView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapGestureDetected:)]];
         [mainWindow addSubview:_dimmingView];
     }
     return _dimmingView;
@@ -166,6 +168,15 @@ static MNGModalManager *_manager = nil;
                 completion();
             }
         }];
+    }
+}
+
+#pragma mark - protocol forwarding
+- (void)tapGestureDetected:(UITapGestureRecognizer *)tapGestureRecognizer
+{
+    if ([self.viewControllerToPresent respondsToSelector:@selector(tapDetectedOutsideModal:)]) {
+        id <MNGModalProtocol> viewController = (id <MNGModalProtocol>) self.viewControllerToPresent;
+        [viewController tapDetectedOutsideModal:tapGestureRecognizer];
     }
 }
 
