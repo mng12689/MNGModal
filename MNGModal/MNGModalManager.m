@@ -6,11 +6,10 @@
 //
 //
 
-#import "MNGModalWindowManager.h"
+#import "MNGModalManager.h"
 
-@interface MNGModalWindowManager ()
+@interface MNGModalManager ()
 
-@property (nonatomic, strong) UIWindow *modalWindow;
 @property (nonatomic, strong) UIView *dimmingView;
 
 @property (nonatomic, strong) UIViewController *viewControllerToPresent;
@@ -18,14 +17,14 @@
 
 @end
 
-@implementation MNGModalWindowManager
+@implementation MNGModalManager
 
-static MNGModalWindowManager *_manager = nil;
+static MNGModalManager *_manager = nil;
 
 #pragma mark - singleton accessor methods
-+ (MNGModalWindowManager *)manager
++ (MNGModalManager *)manager
 {
-    @synchronized([MNGModalWindowManager class])
+    @synchronized([MNGModalManager class])
     {
         if (!_manager) {
             _manager = [[self alloc] init];
@@ -36,7 +35,7 @@ static MNGModalWindowManager *_manager = nil;
 }
 
 + (id)alloc{
-    @synchronized([MNGModalWindowManager class]){
+    @synchronized([MNGModalManager class]){
         NSAssert(_manager == nil, @"Attempted to allocate a second instance of singleton");
         _manager = [super alloc];
         return _manager;
@@ -45,25 +44,14 @@ static MNGModalWindowManager *_manager = nil;
 }
 
 #pragma mark - lazy loaders
-- (UIWindow *)modalWindow
-{
-    if (!_modalWindow) {
-        _modalWindow = [UIWindow new];
-        _modalWindow.windowLevel = UIWindowLevelStatusBar;
-        
-        UIViewController *rootViewController = [UIViewController new];
-        _modalWindow.rootViewController = rootViewController;
-    }
-    return _modalWindow;
-}
-
 - (UIView *)dimmingView
 {
     if (!_dimmingView) {
-        _dimmingView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.modalWindow.rootViewController.view.bounds.size.width, self.modalWindow.rootViewController.view.bounds.size.height)];
+        UIWindow *mainWindow = [[UIApplication sharedApplication].delegate window];
+        _dimmingView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, mainWindow.bounds.size.width, mainWindow.bounds.size.height)];
         _dimmingView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
         _dimmingView.backgroundColor = [UIColor clearColor];
-        [self.modalWindow.rootViewController.view addSubview:_dimmingView];
+        [mainWindow addSubview:_dimmingView];
     }
     return _dimmingView;
 }
@@ -79,9 +67,6 @@ static MNGModalWindowManager *_manager = nil;
     self.options = options;
     self.viewControllerToPresent = viewControllerToPresent;
     
-    UIWindow *modalWindow = self.modalWindow;
-    UIViewController *rootViewController = modalWindow.rootViewController;
-    
     UIView *dimmingView = self.dimmingView;
     if (options & MNGModalAnimationShouldDarken) {
         dimmingView.backgroundColor = [UIColor clearColor];
@@ -91,13 +76,13 @@ static MNGModalWindowManager *_manager = nil;
     NSInteger equalityTest =  (7 << 2) & options;
     
     if (equalityTest == MNGModalAnimationSlideFromBottom) {
-        startFrame.origin.y = rootViewController.view.frame.size.height;
+        startFrame.origin.y = dimmingView.frame.size.height;
     }else if (equalityTest == MNGModalAnimationSlideFromTop) {
-        startFrame.origin.y = rootViewController.view.frame.origin.y-viewControllerToPresent.view.frame.size.height;
+        startFrame.origin.y = dimmingView.frame.origin.y-viewControllerToPresent.view.frame.size.height;
     }else if (equalityTest == MNGModalAnimationSlideFromRight) {
-        startFrame.origin.x = rootViewController.view.frame.size.width;
+        startFrame.origin.x = dimmingView.frame.size.width;
     }else if (equalityTest == MNGModalAnimationSlideFromLeft) {
-        startFrame.origin.x = rootViewController.view.frame.origin.x-viewControllerToPresent.view.frame.size.width;
+        startFrame.origin.x = dimmingView.frame.origin.x-viewControllerToPresent.view.frame.size.width;
     }
     viewControllerToPresent.view.frame = startFrame;
     
@@ -106,15 +91,8 @@ static MNGModalWindowManager *_manager = nil;
         viewControllerToPresent.view.alpha = 0;
     }
     
-    [viewControllerToPresent willMoveToParentViewController:rootViewController];
-    [rootViewController addChildViewController:viewControllerToPresent];
-    [viewControllerToPresent didMoveToParentViewController:rootViewController];
-    
-    [viewControllerToPresent.view willMoveToSuperview:rootViewController.view];
-    [rootViewController.view addSubview:viewControllerToPresent.view];
+    [dimmingView addSubview:viewControllerToPresent.view];
     [viewControllerToPresent.view didMoveToSuperview];
-    
-    [modalWindow makeKeyAndVisible];
     
     void(^animationsBlock)() = ^() {
         if (options & MNGModalAnimationShouldDarken) {
@@ -139,9 +117,6 @@ static MNGModalWindowManager *_manager = nil;
 
 - (void)dismissModalViewControllerWithCompletion:(void (^)(void))completion
 {
-    UIWindow *window = self.modalWindow;
-    UIViewController *rootViewController = window.rootViewController;
-    
     MNGModalViewControllerOptions options = self.options;
     UIViewController *presentedViewController = self.viewControllerToPresent;
     
@@ -149,18 +124,18 @@ static MNGModalWindowManager *_manager = nil;
     NSInteger equalityTest =  (7 << 2) & options;
     
     if (equalityTest == MNGModalAnimationSlideFromBottom) {
-        endFrame.origin.y = rootViewController.view.frame.size.height;
+        endFrame.origin.y = self.dimmingView.frame.size.height;
     }else if (equalityTest == MNGModalAnimationSlideFromTop) {
-        endFrame.origin.y = rootViewController.view.frame.origin.y-presentedViewController.view.frame.size.height;
+        endFrame.origin.y = self.dimmingView.frame.origin.y-presentedViewController.view.frame.size.height;
     }else if (equalityTest == MNGModalAnimationSlideFromRight) {
-        endFrame.origin.x = rootViewController.view.frame.size.width;
+        endFrame.origin.x = self.dimmingView.frame.size.width;
     }else if (equalityTest == MNGModalAnimationSlideFromLeft) {
-        endFrame.origin.x = rootViewController.view.frame.origin.x-presentedViewController.view.frame.size.width;
+        endFrame.origin.x = self.dimmingView.frame.origin.x-presentedViewController.view.frame.size.width;
     }
     
     void(^animationsBlock)() = ^() {
         if (options & MNGModalAnimationShouldDarken) {
-            UIView *dimmingView = [[MNGModalWindowManager manager] dimmingView];
+            UIView *dimmingView = [[MNGModalManager manager] dimmingView];
             dimmingView.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0];
         }
         if (equalityTest == MNGModalAnimationFade) {
@@ -173,14 +148,10 @@ static MNGModalWindowManager *_manager = nil;
         [presentedViewController.view removeFromSuperview];
         [presentedViewController.view didMoveToSuperview];
         
-        [presentedViewController willMoveToParentViewController:nil];
-        [presentedViewController removeFromParentViewController];
-        [presentedViewController didMoveToParentViewController:nil];
-        
         self.viewControllerToPresent = nil;
-        self.dimmingView = nil;
         
-        [[[UIApplication sharedApplication].delegate window] makeKeyAndVisible];
+        [self.dimmingView removeFromSuperview];
+        self.dimmingView = nil;
     };
     
     if (equalityTest == MNGModalAnimationNone) {

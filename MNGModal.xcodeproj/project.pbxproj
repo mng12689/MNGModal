@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		544308D81822C5C80062599C /* MNGModalWindowManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 544308D71822C5C80062599C /* MNGModalWindowManager.m */; };
+		544308D81822C5C80062599C /* MNGModalManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 544308D71822C5C80062599C /* MNGModalManager.m */; };
 		54E0148818203B69008CD34E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54E0148718203B69008CD34E /* Foundation.framework */; };
 		54E0148A18203B69008CD34E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54E0148918203B69008CD34E /* CoreGraphics.framework */; };
 		54E0148C18203B69008CD34E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54E0148B18203B69008CD34E /* UIKit.framework */; };
@@ -35,8 +35,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		544308D61822C5C80062599C /* MNGModalWindowManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNGModalWindowManager.h; sourceTree = "<group>"; };
-		544308D71822C5C80062599C /* MNGModalWindowManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MNGModalWindowManager.m; sourceTree = "<group>"; };
+		544308D61822C5C80062599C /* MNGModalManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNGModalManager.h; sourceTree = "<group>"; };
+		544308D71822C5C80062599C /* MNGModalManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MNGModalManager.m; sourceTree = "<group>"; };
 		54E0148418203B69008CD34E /* MNGModal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MNGModal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		54E0148718203B69008CD34E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		54E0148918203B69008CD34E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -120,8 +120,8 @@
 				54E0149718203B69008CD34E /* AppDelegate.m */,
 				54E014B918203C3C008CD34E /* UIViewController+CustomModals.h */,
 				54E014BA18203C3C008CD34E /* UIViewController+CustomModals.m */,
-				544308D61822C5C80062599C /* MNGModalWindowManager.h */,
-				544308D71822C5C80062599C /* MNGModalWindowManager.m */,
+				544308D61822C5C80062599C /* MNGModalManager.h */,
+				544308D71822C5C80062599C /* MNGModalManager.m */,
 				54E014BC18203DB3008CD34E /* ButtonViewController.h */,
 				54E014BD18203DB3008CD34E /* ButtonViewController.m */,
 				54E0149918203B69008CD34E /* Images.xcassets */,
@@ -254,7 +254,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				54E0149818203B69008CD34E /* AppDelegate.m in Sources */,
-				544308D81822C5C80062599C /* MNGModalWindowManager.m in Sources */,
+				544308D81822C5C80062599C /* MNGModalManager.m in Sources */,
 				54E014BB18203C3C008CD34E /* UIViewController+CustomModals.m in Sources */,
 				54E0149418203B69008CD34E /* main.m in Sources */,
 				54E014BE18203DB3008CD34E /* ButtonViewController.m in Sources */,

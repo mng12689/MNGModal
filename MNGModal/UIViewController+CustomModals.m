@@ -12,12 +12,12 @@
 
 -(void)presentViewController:(UIViewController *)viewControllerToPresent frame:(CGRect)frame options:(MNGModalViewControllerOptions)options completion:(void (^)(void))completion
 {
-    [[MNGModalWindowManager manager] presentViewController:viewControllerToPresent frame:frame options:options completion:completion];
+    [[MNGModalManager manager] presentViewController:viewControllerToPresent frame:frame options:options completion:completion];
 }
 
 - (void)dismissModalViewControllerWithCompletion:(void (^)(void))completion
 {
-    [[MNGModalWindowManager manager] dismissModalViewControllerWithCompletion:completion];
+    [[MNGModalManager manager] dismissModalViewControllerWithCompletion:completion];
 }
 
 @end

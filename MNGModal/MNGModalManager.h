@@ -19,9 +19,9 @@ typedef NS_OPTIONS(NSUInteger, MNGModalViewControllerOptions) {
 	MNGModalAnimationFade                       = 5 << 2,
 };
 
-@interface MNGModalWindowManager : NSObject
+@interface MNGModalManager : NSObject
 
-+ (MNGModalWindowManager *)manager;
++ (MNGModalManager *)manager;
 
 -(void)presentViewController:(UIViewController *)viewControllerToPresent frame:(CGRect)frame options:(MNGModalViewControllerOptions)options completion:(void (^)(void))completion;
 
