@@ -9,7 +9,7 @@
 #import "MNGModalManager.h"
 #import "MNGModalProtocol.h"
 
-@interface MNGModalManager ()
+@interface MNGModalManager () <UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) UIView *dimmingView;
 
@@ -52,7 +52,9 @@ static MNGModalManager *_manager = nil;
         _dimmingView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, mainWindow.bounds.size.width, mainWindow.bounds.size.height)];
         _dimmingView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
         _dimmingView.backgroundColor = [UIColor clearColor];
-        [_dimmingView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapGestureDetected:)]];
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapGestureDetected:)];
+        tap.delegate = self;
+        [_dimmingView addGestureRecognizer:tap];
         [mainWindow addSubview:_dimmingView];
     }
     return _dimmingView;
@@ -178,6 +180,13 @@ static MNGModalManager *_manager = nil;
         id <MNGModalProtocol> viewController = (id <MNGModalProtocol>) self.viewControllerToPresent;
         [viewController tapDetectedOutsideModal:tapGestureRecognizer];
     }
+}
+
+#pragma mark - Tap Gesture delegate methods
+-(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    UIView *view = [self.dimmingView hitTest:[touch locationInView:self.dimmingView] withEvent:nil];
+    return view == self.dimmingView ? YES : NO;
 }
 
 @end
