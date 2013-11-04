@@ -8,6 +8,7 @@
 
 #import "ButtonViewController.h"
 #import "UIViewController+CustomModals.h"
+#import "PresentedViewController.h"
 
 @interface ButtonViewController () <MNGModalProtocol>
 
@@ -40,7 +41,7 @@
     NSInteger buttonHeight = 50;
     NSInteger spacing = 10;
     
-    UIButton *presentButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2-buttonWidth-spacing,
+    UIButton *presentButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2-buttonWidth/2,
                                                                         2*spacing,
                                                                         buttonWidth,
                                                                         buttonHeight)];
@@ -50,22 +51,13 @@
     [presentButton addTarget:self action:@selector(testCategory) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:presentButton];
     
-    UIButton *dismissButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2+spacing,
-                                                                        presentButton.frame.origin.y,
-                                                                        buttonWidth,
-                                                                        buttonHeight)];
-    [dismissButton setTitle:@"Dismiss Modal" forState:UIControlStateNormal];
-    dismissButton.titleLabel.font = [UIFont boldSystemFontOfSize:18];
-    dismissButton.backgroundColor = [UIColor blackColor];
-    [dismissButton addTarget:self action:@selector(dismissCurrentModal) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:dismissButton];
     
     NSArray *items = @[@"None", @"Fade", @"From Left", @"From Right", @"From Bottom", @"From Top"];
     self.segControl = [[UISegmentedControl alloc]initWithItems:items];
     self.segControl.frame = CGRectMake(spacing,
-                                  dismissButton.frame.origin.y+dismissButton.frame.size.height+spacing,
+                                  presentButton.frame.origin.y+presentButton.frame.size.height+spacing,
                                   self.view.frame.size.width-spacing-spacing,
-                                  dismissButton.frame.size.height);
+                                  presentButton.frame.size.height);
     [self.view addSubview:self.segControl];
     
     UIButton *shouldDarkenButton = [UIButton new];
@@ -86,14 +78,7 @@
 
 - (void)testCategory
 {
-    UIViewController *testVC = [UIViewController new];
-    testVC.view.backgroundColor = [UIColor blueColor];
-    
-    UITextField *textField = [[UITextField alloc]initWithFrame:CGRectMake(40, 40, 100, 40)];
-    textField.userInteractionEnabled = YES;
-    textField.backgroundColor = [UIColor greenColor];
-    [testVC.view addSubview:textField];
-    [testVC.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissCurrentModal)]];
+    UIViewController *testVC = [PresentedViewController new];
     
     NSUInteger index = self.segControl.selectedSegmentIndex;
     MNGModalViewControllerOptions options = [ButtonViewController animationOptionAtIndex:index];
@@ -105,11 +90,6 @@
                           frame:CGRectMake(200, 200, 300, 400)
                         options:options
                      completion:nil];
-}
-
-- (void)dismissCurrentModal
-{
-    [self dismissModalViewControllerWithCompletion:nil];
 }
 
 + (MNGModalViewControllerOptions)animationOptionAtIndex:(NSUInteger)index

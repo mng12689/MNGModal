@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		544308D81822C5C80062599C /* MNGModalManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 544308D71822C5C80062599C /* MNGModalManager.m */; };
+		544308DD18244C3A0062599C /* PresentedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 544308DC18244C3A0062599C /* PresentedViewController.m */; };
 		54E0148818203B69008CD34E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54E0148718203B69008CD34E /* Foundation.framework */; };
 		54E0148A18203B69008CD34E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54E0148918203B69008CD34E /* CoreGraphics.framework */; };
 		54E0148C18203B69008CD34E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54E0148B18203B69008CD34E /* UIKit.framework */; };
@@ -38,6 +39,8 @@
 		544308D61822C5C80062599C /* MNGModalManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNGModalManager.h; sourceTree = "<group>"; };
 		544308D71822C5C80062599C /* MNGModalManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MNGModalManager.m; sourceTree = "<group>"; };
 		544308D9182447C40062599C /* MNGModalProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MNGModalProtocol.h; sourceTree = "<group>"; };
+		544308DB18244C3A0062599C /* PresentedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PresentedViewController.h; sourceTree = "<group>"; };
+		544308DC18244C3A0062599C /* PresentedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PresentedViewController.m; sourceTree = "<group>"; };
 		54E0148418203B69008CD34E /* MNGModal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MNGModal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		54E0148718203B69008CD34E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		54E0148918203B69008CD34E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -89,6 +92,8 @@
 			children = (
 				54E014BC18203DB3008CD34E /* ButtonViewController.h */,
 				54E014BD18203DB3008CD34E /* ButtonViewController.m */,
+				544308DB18244C3A0062599C /* PresentedViewController.h */,
+				544308DC18244C3A0062599C /* PresentedViewController.m */,
 			);
 			name = "Test Project Files";
 			sourceTree = "<group>";
@@ -266,6 +271,7 @@
 				54E0149818203B69008CD34E /* AppDelegate.m in Sources */,
 				544308D81822C5C80062599C /* MNGModalManager.m in Sources */,
 				54E014BB18203C3C008CD34E /* UIViewController+CustomModals.m in Sources */,
+				544308DD18244C3A0062599C /* PresentedViewController.m in Sources */,
 				54E0149418203B69008CD34E /* main.m in Sources */,
 				54E014BE18203DB3008CD34E /* ButtonViewController.m in Sources */,
 			);
