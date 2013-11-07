@@ -89,7 +89,8 @@
     [self presentViewController:testVC
                           frame:CGRectMake(200, 200, 300, 400)
                         options:options
-                     completion:nil];
+                     completion:nil
+                       delegate:self];
 }
 
 + (MNGModalViewControllerOptions)animationOptionAtIndex:(NSUInteger)index

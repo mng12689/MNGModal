@@ -16,6 +16,8 @@
 @property (nonatomic, strong) UIViewController *viewControllerToPresent;
 @property (nonatomic, assign) MNGModalViewControllerOptions options;
 
+@property (nonatomic, weak) id <MNGModalProtocol> delegate;
+
 @end
 
 @implementation MNGModalManager
@@ -61,7 +63,7 @@ static MNGModalManager *_manager = nil;
 }
 
 #pragma mark - modal presentation and dismissal methods
--(void)presentViewController:(UIViewController *)viewControllerToPresent frame:(CGRect)frame options:(MNGModalViewControllerOptions)options completion:(void (^)(void))completion
+-(void)presentViewController:(UIViewController *)viewControllerToPresent frame:(CGRect)frame options:(MNGModalViewControllerOptions)options completion:(void (^)(void))completion delegate:(id<MNGModalProtocol>)delegate
 {
     if (self.viewControllerToPresent) {
         NSLog(@"WARNING: A modal view controller is already being presented from the current view controller.");
@@ -70,6 +72,7 @@ static MNGModalManager *_manager = nil;
     
     self.options = options;
     self.viewControllerToPresent = viewControllerToPresent;
+    self.delegate = delegate;
     
     UIView *dimmingView = self.dimmingView;
     if (options & MNGModalAnimationShouldDarken) {
@@ -176,9 +179,8 @@ static MNGModalManager *_manager = nil;
 #pragma mark - protocol forwarding
 - (void)tapGestureDetected:(UITapGestureRecognizer *)tapGestureRecognizer
 {
-    if ([self.viewControllerToPresent respondsToSelector:@selector(tapDetectedOutsideModal:)]) {
-        id <MNGModalProtocol> viewController = (id <MNGModalProtocol>) self.viewControllerToPresent;
-        [viewController tapDetectedOutsideModal:tapGestureRecognizer];
+    if ([self.delegate respondsToSelector:@selector(tapDetectedOutsideModal:)]) {
+        [self.delegate tapDetectedOutsideModal:tapGestureRecognizer];
     }
 }
 

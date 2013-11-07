@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MNGModal/ButtonViewController.m"
-            timestampString = "405031961.144606"
+            timestampString = "405553458.335406"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "120"
-            endingLineNumber = "120"
+            startingLineNumber = "121"
+            endingLineNumber = "121"
             landmarkName = "+animationOptionAtIndex:"
             landmarkType = "5">
          </BreakpointContent>
@@ -25,28 +25,28 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MNGModal/MNGModalManager.m"
-            timestampString = "405031129.568636"
+            filePath = "MNGModal/ButtonViewController.m"
+            timestampString = "405553458.335406"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "177"
-            endingLineNumber = "177"
-            landmarkName = "-tapGestureDetected:"
-            landmarkType = "5">
+            startingLineNumber = "153"
+            endingLineNumber = "153">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MNGModal/ButtonViewController.m"
-            timestampString = "405031961.144606"
+            filePath = "MNGModal/MNGModalManager.h"
+            timestampString = "405553254.734011"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "152"
-            endingLineNumber = "152">
+            startingLineNumber = "27"
+            endingLineNumber = "27"
+            landmarkName = "-presentViewController:frame:options:completion:delegate:"
+            landmarkType = "4">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
