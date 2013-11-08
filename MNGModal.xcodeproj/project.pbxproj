@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		54BE032A182D9F2A005FB4F9 /* ButtonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54BE0327182D9F2A005FB4F9 /* ButtonViewController.m */; };
-		54BE032B182D9F2A005FB4F9 /* PresentedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54BE0329182D9F2A005FB4F9 /* PresentedViewController.m */; };
-		54BE0334182D9F39005FB4F9 /* MNGModalLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 54BE032D182D9F39005FB4F9 /* MNGModalLayer.m */; };
-		54BE0335182D9F39005FB4F9 /* MNGModalManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 54BE032F182D9F39005FB4F9 /* MNGModalManager.m */; };
-		54BE0336182D9F39005FB4F9 /* UIViewController+CustomModals.m in Sources */ = {isa = PBXBuildFile; fileRef = 54BE0333182D9F39005FB4F9 /* UIViewController+CustomModals.m */; };
+		54BE0340182DA2DA005FB4F9 /* MNGModalLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 54BE0339182DA2DA005FB4F9 /* MNGModalLayer.m */; };
+		54BE0341182DA2DA005FB4F9 /* MNGModalManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 54BE033B182DA2DA005FB4F9 /* MNGModalManager.m */; };
+		54BE0342182DA2DA005FB4F9 /* UIViewController+CustomModals.m in Sources */ = {isa = PBXBuildFile; fileRef = 54BE033F182DA2DA005FB4F9 /* UIViewController+CustomModals.m */; };
+		54BE0347182DA2F2005FB4F9 /* ButtonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54BE0344182DA2F2005FB4F9 /* ButtonViewController.m */; };
+		54BE0348182DA2F2005FB4F9 /* PresentedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54BE0346182DA2F2005FB4F9 /* PresentedViewController.m */; };
 		54E0148818203B69008CD34E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54E0148718203B69008CD34E /* Foundation.framework */; };
 		54E0148A18203B69008CD34E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54E0148918203B69008CD34E /* CoreGraphics.framework */; };
 		54E0148C18203B69008CD34E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54E0148B18203B69008CD34E /* UIKit.framework */; };
@@ -37,18 +37,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		54BE0326182D9F2A005FB4F9 /* ButtonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ButtonViewController.h; path = "Demo View Controllers/ButtonViewController.h"; sourceTree = "<group>"; };
-		54BE0327182D9F2A005FB4F9 /* ButtonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ButtonViewController.m; path = "Demo View Controllers/ButtonViewController.m"; sourceTree = "<group>"; };
-		54BE0328182D9F2A005FB4F9 /* PresentedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PresentedViewController.h; path = "Demo View Controllers/PresentedViewController.h"; sourceTree = "<group>"; };
-		54BE0329182D9F2A005FB4F9 /* PresentedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PresentedViewController.m; path = "Demo View Controllers/PresentedViewController.m"; sourceTree = "<group>"; };
-		54BE032C182D9F39005FB4F9 /* MNGModalLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MNGModalLayer.h; path = "Category Requisites/MNGModalLayer.h"; sourceTree = "<group>"; };
-		54BE032D182D9F39005FB4F9 /* MNGModalLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MNGModalLayer.m; path = "Category Requisites/MNGModalLayer.m"; sourceTree = "<group>"; };
-		54BE032E182D9F39005FB4F9 /* MNGModalManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MNGModalManager.h; path = "Category Requisites/MNGModalManager.h"; sourceTree = "<group>"; };
-		54BE032F182D9F39005FB4F9 /* MNGModalManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MNGModalManager.m; path = "Category Requisites/MNGModalManager.m"; sourceTree = "<group>"; };
-		54BE0330182D9F39005FB4F9 /* MNGModalProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MNGModalProtocol.h; path = "Category Requisites/MNGModalProtocol.h"; sourceTree = "<group>"; };
-		54BE0331182D9F39005FB4F9 /* MNGModalViewControllerOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MNGModalViewControllerOptions.h; path = "Category Requisites/MNGModalViewControllerOptions.h"; sourceTree = "<group>"; };
-		54BE0332182D9F39005FB4F9 /* UIViewController+CustomModals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+CustomModals.h"; path = "Category Requisites/UIViewController+CustomModals.h"; sourceTree = "<group>"; };
-		54BE0333182D9F39005FB4F9 /* UIViewController+CustomModals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+CustomModals.m"; path = "Category Requisites/UIViewController+CustomModals.m"; sourceTree = "<group>"; };
+		54BE0338182DA2DA005FB4F9 /* MNGModalLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MNGModalLayer.h; path = CategoryRequisites/MNGModalLayer.h; sourceTree = "<group>"; };
+		54BE0339182DA2DA005FB4F9 /* MNGModalLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MNGModalLayer.m; path = CategoryRequisites/MNGModalLayer.m; sourceTree = "<group>"; };
+		54BE033A182DA2DA005FB4F9 /* MNGModalManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MNGModalManager.h; path = CategoryRequisites/MNGModalManager.h; sourceTree = "<group>"; };
+		54BE033B182DA2DA005FB4F9 /* MNGModalManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MNGModalManager.m; path = CategoryRequisites/MNGModalManager.m; sourceTree = "<group>"; };
+		54BE033C182DA2DA005FB4F9 /* MNGModalProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MNGModalProtocol.h; path = CategoryRequisites/MNGModalProtocol.h; sourceTree = "<group>"; };
+		54BE033D182DA2DA005FB4F9 /* MNGModalViewControllerOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MNGModalViewControllerOptions.h; path = CategoryRequisites/MNGModalViewControllerOptions.h; sourceTree = "<group>"; };
+		54BE033E182DA2DA005FB4F9 /* UIViewController+CustomModals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+CustomModals.h"; path = "CategoryRequisites/UIViewController+CustomModals.h"; sourceTree = "<group>"; };
+		54BE033F182DA2DA005FB4F9 /* UIViewController+CustomModals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+CustomModals.m"; path = "CategoryRequisites/UIViewController+CustomModals.m"; sourceTree = "<group>"; };
+		54BE0343182DA2F2005FB4F9 /* ButtonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ButtonViewController.h; path = DemoViewControllers/ButtonViewController.h; sourceTree = "<group>"; };
+		54BE0344182DA2F2005FB4F9 /* ButtonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ButtonViewController.m; path = DemoViewControllers/ButtonViewController.m; sourceTree = "<group>"; };
+		54BE0345182DA2F2005FB4F9 /* PresentedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PresentedViewController.h; path = DemoViewControllers/PresentedViewController.h; sourceTree = "<group>"; };
+		54BE0346182DA2F2005FB4F9 /* PresentedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PresentedViewController.m; path = DemoViewControllers/PresentedViewController.m; sourceTree = "<group>"; };
 		54E0148418203B69008CD34E /* MNGModal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MNGModal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		54E0148718203B69008CD34E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		54E0148918203B69008CD34E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -94,10 +94,10 @@
 		544308DA1824482E0062599C /* Test Project Files */ = {
 			isa = PBXGroup;
 			children = (
-				54BE0326182D9F2A005FB4F9 /* ButtonViewController.h */,
-				54BE0327182D9F2A005FB4F9 /* ButtonViewController.m */,
-				54BE0328182D9F2A005FB4F9 /* PresentedViewController.h */,
-				54BE0329182D9F2A005FB4F9 /* PresentedViewController.m */,
+				54BE0343182DA2F2005FB4F9 /* ButtonViewController.h */,
+				54BE0344182DA2F2005FB4F9 /* ButtonViewController.m */,
+				54BE0345182DA2F2005FB4F9 /* PresentedViewController.h */,
+				54BE0346182DA2F2005FB4F9 /* PresentedViewController.m */,
 			);
 			name = "Test Project Files";
 			sourceTree = "<group>";
@@ -105,14 +105,14 @@
 		54BE0337182D9F47005FB4F9 /* Category Requisites */ = {
 			isa = PBXGroup;
 			children = (
-				54BE032C182D9F39005FB4F9 /* MNGModalLayer.h */,
-				54BE032D182D9F39005FB4F9 /* MNGModalLayer.m */,
-				54BE032E182D9F39005FB4F9 /* MNGModalManager.h */,
-				54BE032F182D9F39005FB4F9 /* MNGModalManager.m */,
-				54BE0330182D9F39005FB4F9 /* MNGModalProtocol.h */,
-				54BE0331182D9F39005FB4F9 /* MNGModalViewControllerOptions.h */,
-				54BE0332182D9F39005FB4F9 /* UIViewController+CustomModals.h */,
-				54BE0333182D9F39005FB4F9 /* UIViewController+CustomModals.m */,
+				54BE0338182DA2DA005FB4F9 /* MNGModalLayer.h */,
+				54BE0339182DA2DA005FB4F9 /* MNGModalLayer.m */,
+				54BE033A182DA2DA005FB4F9 /* MNGModalManager.h */,
+				54BE033B182DA2DA005FB4F9 /* MNGModalManager.m */,
+				54BE033C182DA2DA005FB4F9 /* MNGModalProtocol.h */,
+				54BE033D182DA2DA005FB4F9 /* MNGModalViewControllerOptions.h */,
+				54BE033E182DA2DA005FB4F9 /* UIViewController+CustomModals.h */,
+				54BE033F182DA2DA005FB4F9 /* UIViewController+CustomModals.m */,
 			);
 			name = "Category Requisites";
 			sourceTree = "<group>";
@@ -284,11 +284,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				54E0149818203B69008CD34E /* AppDelegate.m in Sources */,
-				54BE0334182D9F39005FB4F9 /* MNGModalLayer.m in Sources */,
-				54BE0335182D9F39005FB4F9 /* MNGModalManager.m in Sources */,
-				54BE032B182D9F2A005FB4F9 /* PresentedViewController.m in Sources */,
-				54BE0336182D9F39005FB4F9 /* UIViewController+CustomModals.m in Sources */,
-				54BE032A182D9F2A005FB4F9 /* ButtonViewController.m in Sources */,
+				54BE0348182DA2F2005FB4F9 /* PresentedViewController.m in Sources */,
+				54BE0340182DA2DA005FB4F9 /* MNGModalLayer.m in Sources */,
+				54BE0341182DA2DA005FB4F9 /* MNGModalManager.m in Sources */,
+				54BE0342182DA2DA005FB4F9 /* UIViewController+CustomModals.m in Sources */,
+				54BE0347182DA2F2005FB4F9 /* ButtonViewController.m in Sources */,
 				54E0149418203B69008CD34E /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
