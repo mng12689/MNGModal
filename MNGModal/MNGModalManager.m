@@ -184,8 +184,10 @@ static MNGModalManager *_manager = nil;
         [presentedViewController.view removeFromSuperview];
         [presentedViewController.view didMoveToSuperview];
         
-        [self.dimmingView removeFromSuperview];
-        self.dimmingView = nil;
+        if (![self topModalLayer]) {
+            [self.dimmingView removeFromSuperview];
+            self.dimmingView = nil;
+        }
     };
     
     if (equalityTest == MNGModalAnimationNone) {
