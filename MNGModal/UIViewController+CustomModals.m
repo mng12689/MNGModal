@@ -12,12 +12,12 @@
 
 -(void)presentViewController:(UIViewController *)viewControllerToPresent frame:(CGRect)frame options:(MNGModalViewControllerOptions)options completion:(void (^)(void))completion
 {
-    [[MNGModalManager manager] presentViewController:viewControllerToPresent frame:frame options:options completion:completion delegate:nil];
+    [[MNGModalManager manager] presentViewController:viewControllerToPresent fromViewController:self frame:frame options:options completion:completion delegate:nil];
 }
 
 -(void)presentViewController:(UIViewController *)viewControllerToPresent frame:(CGRect)frame options:(MNGModalViewControllerOptions)options completion:(void (^)(void))completion delegate:(id<MNGModalProtocol>)delegate
 {
-    [[MNGModalManager manager] presentViewController:viewControllerToPresent frame:frame options:options completion:completion delegate:delegate];
+    [[MNGModalManager manager] presentViewController:viewControllerToPresent fromViewController:self frame:frame options:options completion:completion delegate:delegate];
 }
 
 - (void)dismissModalViewControllerWithCompletion:(void (^)(void))completion

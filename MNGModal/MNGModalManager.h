@@ -24,7 +24,7 @@ typedef NS_OPTIONS(NSUInteger, MNGModalViewControllerOptions) {
 
 + (MNGModalManager *)manager;
 
-- (void)presentViewController:(UIViewController *)viewControllerToPresent frame:(CGRect)frame options:(MNGModalViewControllerOptions)options completion:(void (^)(void))completion delegate:(id <MNGModalProtocol>)delegate;
+-(void)presentViewController:(UIViewController *)presentedViewController fromViewController:(UIViewController *)presentingViewController frame:(CGRect)frame options:(MNGModalViewControllerOptions)options completion:(void (^)(void))completion delegate:(id<MNGModalProtocol>)delegate;
 
 - (void)dismissModalViewControllerWithCompletion:(void (^)(void))completion;
 

@@ -8,15 +8,12 @@
 
 #import "MNGModalManager.h"
 #import "MNGModalProtocol.h"
+#import "MNGModalLayer.m"
 
 @interface MNGModalManager () <UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) UIView *dimmingView;
-
-@property (nonatomic, strong) UIViewController *viewControllerToPresent;
-@property (nonatomic, assign) MNGModalViewControllerOptions options;
-
-@property (nonatomic, weak) id <MNGModalProtocol> delegate;
+@property (nonatomic, strong) NSMutableArray *modalLayerStack;
 
 @end
 
@@ -62,22 +59,48 @@ static MNGModalManager *_manager = nil;
     return _dimmingView;
 }
 
-#pragma mark - modal presentation and dismissal methods
--(void)presentViewController:(UIViewController *)viewControllerToPresent frame:(CGRect)frame options:(MNGModalViewControllerOptions)options completion:(void (^)(void))completion delegate:(id<MNGModalProtocol>)delegate
+- (NSMutableArray *)modalLayerStack
 {
-    if (self.viewControllerToPresent) {
+    if (!_modalLayerStack) {
+        _modalLayerStack = [NSMutableArray new];
+    }
+    return _modalLayerStack;
+}
+
+#pragma mark - modal layer stack methods
+- (void)pushModalLayer:(MNGModalLayer *)layer
+{
+    [self.modalLayerStack addObject:layer];
+}
+
+- (MNGModalLayer *)popModalLayer
+{
+    MNGModalLayer *layer = [self topModalLayer];
+    if (layer) {
+        [self.modalLayerStack removeLastObject];
+    }
+    return layer;
+}
+
+- (MNGModalLayer *)topModalLayer
+{
+    return [self.modalLayerStack lastObject];
+}
+
+#pragma mark - modal presentation and dismissal methods
+-(void)presentViewController:(UIViewController *)presentedViewController fromViewController:(UIViewController *)presentingViewController frame:(CGRect)frame options:(MNGModalViewControllerOptions)options completion:(void (^)(void))completion delegate:(id<MNGModalProtocol>)delegate
+{
+    MNGModalLayer *topLayer = [self topModalLayer];
+    if (topLayer.presentingViewController == presentingViewController) {
         NSLog(@"WARNING: A modal view controller is already being presented from the current view controller.");
         return;
     }
     
-    self.options = options;
-    self.viewControllerToPresent = viewControllerToPresent;
-    self.delegate = delegate;
+    MNGModalLayer *layer = [MNGModalLayer layerWithPresentingViewController:presentingViewController presentedViewController:presentedViewController options:options delegate:delegate];
+    [self pushModalLayer:layer];
     
     UIView *dimmingView = self.dimmingView;
-    if (options & MNGModalAnimationShouldDarken) {
-        dimmingView.backgroundColor = [UIColor clearColor];
-    }
+    UIColor *dimmedColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
     
     CGRect startFrame = frame;
     NSInteger equalityTest =  (7 << 2) & options;
@@ -85,28 +108,28 @@ static MNGModalManager *_manager = nil;
     if (equalityTest == MNGModalAnimationSlideFromBottom) {
         startFrame.origin.y = dimmingView.frame.size.height;
     }else if (equalityTest == MNGModalAnimationSlideFromTop) {
-        startFrame.origin.y = dimmingView.frame.origin.y-viewControllerToPresent.view.frame.size.height;
+        startFrame.origin.y = dimmingView.frame.origin.y-presentedViewController.view.frame.size.height;
     }else if (equalityTest == MNGModalAnimationSlideFromRight) {
         startFrame.origin.x = dimmingView.frame.size.width;
     }else if (equalityTest == MNGModalAnimationSlideFromLeft) {
-        startFrame.origin.x = dimmingView.frame.origin.x-viewControllerToPresent.view.frame.size.width;
+        startFrame.origin.x = dimmingView.frame.origin.x-presentedViewController.view.frame.size.width;
     }
-    viewControllerToPresent.view.frame = startFrame;
+    presentedViewController.view.frame = startFrame;
     
-    CGFloat viewFinalAlpha = viewControllerToPresent.view.alpha;
+    CGFloat viewFinalAlpha = presentedViewController.view.alpha;
     if (equalityTest == MNGModalAnimationFade) {
-        viewControllerToPresent.view.alpha = 0;
+        presentedViewController.view.alpha = 0;
     }
     
-    [dimmingView addSubview:viewControllerToPresent.view];
-    [viewControllerToPresent.view didMoveToSuperview];
+    [dimmingView addSubview:presentedViewController.view];
+    [presentedViewController.view didMoveToSuperview];
     
     void(^animationsBlock)() = ^() {
         if (options & MNGModalAnimationShouldDarken) {
-            dimmingView.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
+            dimmingView.backgroundColor = dimmedColor;
         }
-        viewControllerToPresent.view.frame = frame;
-        viewControllerToPresent.view.alpha = viewFinalAlpha;
+        presentedViewController.view.frame = frame;
+        presentedViewController.view.alpha = viewFinalAlpha;
     };
     
     if (equalityTest == MNGModalAnimationNone) {
@@ -124,8 +147,14 @@ static MNGModalManager *_manager = nil;
 
 - (void)dismissModalViewControllerWithCompletion:(void (^)(void))completion
 {
-    MNGModalViewControllerOptions options = self.options;
-    UIViewController *presentedViewController = self.viewControllerToPresent;
+    MNGModalLayer *layer = [self popModalLayer];
+    if (!layer) {
+        NSLog(@"WARNING: There is no modal view controller currently presented to dismiss.");
+        return;
+    }
+    
+    MNGModalViewControllerOptions options = layer.options;
+    UIViewController *presentedViewController = layer.presentedViewController;
     
     CGRect endFrame = presentedViewController.view.frame;
     NSInteger equalityTest =  (7 << 2) & options;
@@ -155,8 +184,6 @@ static MNGModalManager *_manager = nil;
         [presentedViewController.view removeFromSuperview];
         [presentedViewController.view didMoveToSuperview];
         
-        self.viewControllerToPresent = nil;
-        
         [self.dimmingView removeFromSuperview];
         self.dimmingView = nil;
     };
@@ -179,8 +206,9 @@ static MNGModalManager *_manager = nil;
 #pragma mark - protocol forwarding
 - (void)tapGestureDetected:(UITapGestureRecognizer *)tapGestureRecognizer
 {
-    if ([self.delegate respondsToSelector:@selector(tapDetectedOutsideModal:)]) {
-        [self.delegate tapDetectedOutsideModal:tapGestureRecognizer];
+    MNGModalLayer *topLayer = [self topModalLayer];
+    if ([topLayer.delegate respondsToSelector:@selector(tapDetectedOutsideModal:)]) {
+        [topLayer.delegate tapDetectedOutsideModal:tapGestureRecognizer];
     }
 }
 
