@@ -44,6 +44,7 @@
 		544308DC18244C3A0062599C /* PresentedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PresentedViewController.m; sourceTree = "<group>"; };
 		54BE030F182D8783005FB4F9 /* MNGModalLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNGModalLayer.h; sourceTree = "<group>"; };
 		54BE0310182D8783005FB4F9 /* MNGModalLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MNGModalLayer.m; sourceTree = "<group>"; };
+		54BE0314182D91BC005FB4F9 /* MNGModalViewControllerOptions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MNGModalViewControllerOptions.h; sourceTree = "<group>"; };
 		54E0148418203B69008CD34E /* MNGModal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MNGModal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		54E0148718203B69008CD34E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		54E0148918203B69008CD34E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -143,6 +144,7 @@
 				544308D9182447C40062599C /* MNGModalProtocol.h */,
 				54BE030F182D8783005FB4F9 /* MNGModalLayer.h */,
 				54BE0310182D8783005FB4F9 /* MNGModalLayer.m */,
+				54BE0314182D91BC005FB4F9 /* MNGModalViewControllerOptions.h */,
 				544308DA1824482E0062599C /* Test Project Files */,
 				54E0149918203B69008CD34E /* Images.xcassets */,
 				54E0148E18203B69008CD34E /* Supporting Files */,

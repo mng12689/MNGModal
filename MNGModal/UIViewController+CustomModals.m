@@ -7,6 +7,7 @@
 //
 
 #import "UIViewController+CustomModals.h"
+#import "MNGModalManager.h"
 
 @implementation UIViewController (CustomModals)
 

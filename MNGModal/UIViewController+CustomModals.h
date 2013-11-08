@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MNGModalManager.h"
+#import "MNGModalViewControllerOptions.h"
 #import "MNGModalProtocol.h"
 
 @interface UIViewController (CustomModals)

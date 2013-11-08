@@ -9,6 +9,7 @@
 #import "ButtonViewController.h"
 #import "UIViewController+CustomModals.h"
 #import "PresentedViewController.h"
+#import "MNGModalProtocol.h"
 
 @interface ButtonViewController () <MNGModalProtocol>
 

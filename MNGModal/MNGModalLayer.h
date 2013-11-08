@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "UIViewController+CustomModals.h"
+#import "MNGModalViewControllerOptions.h"
+@protocol MNGModalProtocol;
 
 @interface MNGModalLayer : NSObject
 
