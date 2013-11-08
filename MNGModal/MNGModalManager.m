@@ -8,7 +8,7 @@
 
 #import "MNGModalManager.h"
 #import "MNGModalProtocol.h"
-#import "MNGModalLayer.m"
+#import "MNGModalLayer.h"
 
 @interface MNGModalManager () <UIGestureRecognizerDelegate>
 
