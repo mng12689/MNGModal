@@ -188,6 +188,9 @@ static MNGModalManager *_manager = nil;
             [self.dimmingView removeFromSuperview];
             self.dimmingView = nil;
         }
+        if (completion) {
+            completion();
+        }
     };
     
     if (equalityTest == MNGModalAnimationNone) {
@@ -198,9 +201,6 @@ static MNGModalManager *_manager = nil;
             animationsBlock();
         } completion:^(BOOL finished) {
             completionBlock();
-            if (completion) {
-                completion();
-            }
         }];
     }
 }
