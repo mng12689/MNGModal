@@ -48,7 +48,7 @@ static MNGModalManager *_manager = nil;
 {
     if (!_dimmingView) {
         UIWindow *mainWindow = [[UIApplication sharedApplication].delegate window];
-        _dimmingView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, mainWindow.bounds.size.width, mainWindow.bounds.size.height)];
+        _dimmingView = [UIView new];
         _dimmingView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
         _dimmingView.backgroundColor = [UIColor clearColor];
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapGestureDetected:)];
@@ -96,11 +96,29 @@ static MNGModalManager *_manager = nil;
         return;
     }
     
-    MNGModalLayer *layer = [MNGModalLayer layerWithPresentingViewController:presentingViewController presentedViewController:presentedViewController options:options delegate:delegate];
-    [self pushModalLayer:layer];
-    
-    UIView *dimmingView = self.dimmingView;
+    UIWindow *mainWindow = [[UIApplication sharedApplication].delegate window];
     UIColor *dimmedColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
+    UIView *dimmingView = self.dimmingView;
+    
+    CGFloat dimmingYOrigin;
+    // if modal being presented shouldnt cover nav bar, don't
+    if (!(options & MNGModalOptionShouldNotCoverNavigationBar)) {
+        dimmingYOrigin = 0;
+    }else{
+        // else if the modal current top modal should cover the nav bar, ignore the presentingVC not covering the nav bar since the
+        // current top modal is covering it anyways
+        if ([self topModalLayer] && !([[self topModalLayer] options] & MNGModalOptionShouldNotCoverNavigationBar)) {
+            dimmingYOrigin = 0;
+        }else{
+            // if no modal in the stack has yet covered the nav bar, and the presentingVC doesn't want this modal to cover the
+            // nav bar either, then take into account the nav bar when framing the dimming view
+            dimmingYOrigin = presentingViewController.navigationController ? [[presentingViewController topLayoutGuide] length] : 0;
+        }
+    }
+    // we dont want to animate the frame of the dimming view for the first modal, so we set it before the animation block
+    if (![self topModalLayer]) {
+        dimmingView.frame = CGRectMake(0, dimmingYOrigin, mainWindow.bounds.size.width, mainWindow.bounds.size.height-dimmingYOrigin);
+    }
     
     CGRect startFrame = frame;
     NSInteger equalityTest =  (7 << 2) & options;
@@ -121,13 +139,18 @@ static MNGModalManager *_manager = nil;
         presentedViewController.view.alpha = 0;
     }
     
-    [dimmingView addSubview:presentedViewController.view];
+    [mainWindow addSubview:presentedViewController.view];
     [presentedViewController.view didMoveToSuperview];
     
+    MNGModalLayer *layer = [MNGModalLayer layerWithPresentingViewController:presentingViewController presentedViewController:presentedViewController options:options delegate:delegate];
+    [self pushModalLayer:layer];
+    
     void(^animationsBlock)() = ^() {
-        if (options & MNGModalAnimationShouldDarken) {
+        if (options & MNGModalOptionShouldDarken) {
             dimmingView.backgroundColor = dimmedColor;
         }
+        dimmingView.frame = CGRectMake(0, dimmingYOrigin, mainWindow.bounds.size.width, mainWindow.bounds.size.height-dimmingYOrigin);
+
         presentedViewController.view.frame = frame;
         presentedViewController.view.alpha = viewFinalAlpha;
     };
@@ -153,6 +176,7 @@ static MNGModalManager *_manager = nil;
         return;
     }
     
+    UIWindow *mainWindow = [[UIApplication sharedApplication].delegate window];
     MNGModalViewControllerOptions options = layer.options;
     UIViewController *presentedViewController = layer.presentedViewController;
     
@@ -169,11 +193,18 @@ static MNGModalManager *_manager = nil;
         endFrame.origin.x = self.dimmingView.frame.origin.x-presentedViewController.view.frame.size.width;
     }
     
+    NSInteger dimmingYOrigin = self.dimmingView.frame.origin.y;
+    if ([self topModalLayer] && [[self topModalLayer] options] & MNGModalOptionShouldNotCoverNavigationBar) {
+        UIViewController *presentingVC = [[self topModalLayer] presentingViewController];
+        dimmingYOrigin = presentingVC.navigationController ? [[presentingVC topLayoutGuide] length] : 0;
+    }
+    
     void(^animationsBlock)() = ^() {
-        if (options & MNGModalAnimationShouldDarken) {
+        if (options & MNGModalOptionShouldDarken) {
             UIView *dimmingView = [[MNGModalManager manager] dimmingView];
             dimmingView.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0];
         }
+        self.dimmingView.frame = CGRectMake(0, dimmingYOrigin, mainWindow.bounds.size.width, mainWindow.bounds.size.height-dimmingYOrigin);
         if (equalityTest == MNGModalAnimationFade) {
             presentedViewController.view.alpha = 0;
         }

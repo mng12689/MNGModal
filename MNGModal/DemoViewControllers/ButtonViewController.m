@@ -84,12 +84,12 @@
     NSUInteger index = self.segControl.selectedSegmentIndex;
     MNGModalViewControllerOptions options = [ButtonViewController animationOptionAtIndex:index];
     if (self.shouldDarken) {
-        options = options|MNGModalAnimationShouldDarken;
+        options = options|MNGModalOptionShouldDarken;
     }
     
     [self presentViewController:testVC
                           frame:CGRectMake(200, 200, 300, 400)
-                        options:options
+                        options:options|MNGModalOptionShouldNotCoverNavigationBar
                      completion:nil
                        delegate:self];
 }

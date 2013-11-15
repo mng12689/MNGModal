@@ -10,8 +10,9 @@
 #define MNGModal_MNGModalViewControllerOptions_h
 
 typedef NS_OPTIONS(NSUInteger, MNGModalViewControllerOptions) {
-	MNGModalAnimationShouldDarken               = 1 << 0,
-	
+	MNGModalOptionShouldDarken                  = 1 << 0,
+	MNGModalOptionShouldNotCoverNavigationBar   = 1 << 1,
+    
     MNGModalAnimationNone                       = 0 << 2,
 	MNGModalAnimationSlideFromRight             = 1 << 2,
     MNGModalAnimationSlideFromLeft              = 2 << 2,
