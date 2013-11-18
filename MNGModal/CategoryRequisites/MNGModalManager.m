@@ -220,7 +220,6 @@ static MNGModalManager *_manager = nil;
     }
     
     void(^animationsBlock)() = ^() {
-        //this too
         if (shouldRemoveDim) {
             self.dimmingView.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0];
         }
