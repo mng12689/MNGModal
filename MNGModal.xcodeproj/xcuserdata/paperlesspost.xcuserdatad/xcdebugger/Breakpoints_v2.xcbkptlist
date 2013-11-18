@@ -86,13 +86,43 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MNGModal/CategoryRequisites/MNGModalManager.m"
-            timestampString = "406234523.14832"
+            timestampString = "406501724.118769"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "105"
-            endingLineNumber = "105"
-            landmarkName = "-presentViewController:fromViewController:frame:options:completion:delegate:"
+            startingLineNumber = "201"
+            endingLineNumber = "201"
+            landmarkName = "-dismissModalViewControllerWithCompletion:"
             landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[MNGModalManager dismissModalViewControllerWithCompletion:]"
+                  moduleName = "MNGModal"
+                  urlString = "file://localhost/Users/paperlesspost/Desktop/MNGModal/MNGModal/CategoryRequisites/MNGModalManager.m"
+                  timestampString = "406502117.74471"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "201"
+                  endingLineNumber = "201"
+                  offsetFromSymbolStart = "1859">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[MNGModalManager dismissModalViewControllerWithCompletion:]"
+                  moduleName = "MNGModal"
+                  urlString = "file://localhost/Users/paperlesspost/Desktop/MNGModal/MNGModal/CategoryRequisites/MNGModalManager.m"
+                  timestampString = "406502117.745116"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "201"
+                  endingLineNumber = "201"
+                  offsetFromSymbolStart = "2346">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -89,7 +89,7 @@
     
     [self presentViewController:testVC
                           frame:CGRectMake(200, 200, 300, 400)
-                        options:options|MNGModalOptionShouldNotCoverNavigationBar
+                        options:options
                      completion:nil
                        delegate:self];
 }

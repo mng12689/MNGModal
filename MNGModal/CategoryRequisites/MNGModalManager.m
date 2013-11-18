@@ -75,14 +75,14 @@ static MNGModalManager *_manager = nil;
 
 - (MNGModalLayer *)popModalLayer
 {
-    MNGModalLayer *layer = [self topModalLayer];
+    MNGModalLayer *layer = [self peekModalLayer];
     if (layer) {
         [self.modalLayerStack removeLastObject];
     }
     return layer;
 }
 
-- (MNGModalLayer *)topModalLayer
+- (MNGModalLayer *)peekModalLayer
 {
     return [self.modalLayerStack lastObject];
 }
@@ -90,7 +90,7 @@ static MNGModalManager *_manager = nil;
 #pragma mark - modal presentation and dismissal methods
 -(void)presentViewController:(UIViewController *)presentedViewController fromViewController:(UIViewController *)presentingViewController frame:(CGRect)frame options:(MNGModalViewControllerOptions)options completion:(void (^)(void))completion delegate:(id<MNGModalProtocol>)delegate
 {
-    MNGModalLayer *topLayer = [self topModalLayer];
+    MNGModalLayer *topLayer = [self peekModalLayer];
     if (topLayer.presentingViewController == presentingViewController) {
         NSLog(@"WARNING: A modal view controller is already being presented from the current view controller.");
         return;
@@ -101,13 +101,13 @@ static MNGModalManager *_manager = nil;
     UIView *dimmingView = self.dimmingView;
     
     CGFloat dimmingYOrigin;
-    // if modal being presented shouldnt cover nav bar, don't
+    // if modal being presented should cover nav bar, cover it
     if (!(options & MNGModalOptionShouldNotCoverNavigationBar)) {
         dimmingYOrigin = 0;
     }else{
         // else if the modal current top modal should cover the nav bar, ignore the presentingVC not covering the nav bar since the
         // current top modal is covering it anyways
-        if ([self topModalLayer] && !([[self topModalLayer] options] & MNGModalOptionShouldNotCoverNavigationBar)) {
+        if ([self peekModalLayer] && !([[self peekModalLayer] options] & MNGModalOptionShouldNotCoverNavigationBar)) {
             dimmingYOrigin = 0;
         }else{
             // if no modal in the stack has yet covered the nav bar, and the presentingVC doesn't want this modal to cover the
@@ -116,34 +116,35 @@ static MNGModalManager *_manager = nil;
         }
     }
     // we dont want to animate the frame of the dimming view for the first modal, so we set it before the animation block
-    if (![self topModalLayer]) {
+    if (![self peekModalLayer]) {
         dimmingView.frame = CGRectMake(0, dimmingYOrigin, mainWindow.bounds.size.width, mainWindow.bounds.size.height-dimmingYOrigin);
     }
     
     CGRect startFrame = frame;
-    NSInteger equalityTest =  (7 << 2) & options;
+    NSInteger animationOption =  (7 << 2) & options;
     
-    if (equalityTest == MNGModalAnimationSlideFromBottom) {
+    if (animationOption == MNGModalAnimationSlideFromBottom) {
         startFrame.origin.y = dimmingView.frame.size.height;
-    }else if (equalityTest == MNGModalAnimationSlideFromTop) {
+    }else if (animationOption == MNGModalAnimationSlideFromTop) {
         startFrame.origin.y = dimmingView.frame.origin.y-presentedViewController.view.frame.size.height;
-    }else if (equalityTest == MNGModalAnimationSlideFromRight) {
+    }else if (animationOption == MNGModalAnimationSlideFromRight) {
         startFrame.origin.x = dimmingView.frame.size.width;
-    }else if (equalityTest == MNGModalAnimationSlideFromLeft) {
+    }else if (animationOption == MNGModalAnimationSlideFromLeft) {
         startFrame.origin.x = dimmingView.frame.origin.x-presentedViewController.view.frame.size.width;
     }
     presentedViewController.view.frame = startFrame;
     
     CGFloat viewFinalAlpha = presentedViewController.view.alpha;
-    if (equalityTest == MNGModalAnimationFade) {
+    if (animationOption == MNGModalAnimationFade) {
         presentedViewController.view.alpha = 0;
     }
     
-    [mainWindow addSubview:presentedViewController.view];
-    [presentedViewController.view didMoveToSuperview];
-    
-    MNGModalLayer *layer = [MNGModalLayer layerWithPresentingViewController:presentingViewController presentedViewController:presentedViewController options:options delegate:delegate];
+    MNGModalLayer *layer = [MNGModalLayer layerWithPresentingViewController:presentingViewController
+                                                    presentedViewController:presentedViewController
+                                                                    options:options
+                                                                   delegate:delegate];
     [self pushModalLayer:layer];
+    [mainWindow addSubview:presentedViewController.view];
     
     void(^animationsBlock)() = ^() {
         if (options & MNGModalOptionShouldDarken) {
@@ -155,8 +156,11 @@ static MNGModalManager *_manager = nil;
         presentedViewController.view.alpha = viewFinalAlpha;
     };
     
-    if (equalityTest == MNGModalAnimationNone) {
+    if (animationOption == MNGModalAnimationNone) {
         animationsBlock();
+        if (completion) {
+            completion();
+        }
     }else{
         [UIView animateWithDuration:0.4f animations:^{
             animationsBlock();
@@ -181,41 +185,55 @@ static MNGModalManager *_manager = nil;
     UIViewController *presentedViewController = layer.presentedViewController;
     
     CGRect endFrame = presentedViewController.view.frame;
-    NSInteger equalityTest =  (7 << 2) & options;
+    NSInteger animationOption =  (7 << 2) & options;
     
-    if (equalityTest == MNGModalAnimationSlideFromBottom) {
+    if (animationOption == MNGModalAnimationSlideFromBottom) {
         endFrame.origin.y = self.dimmingView.frame.size.height;
-    }else if (equalityTest == MNGModalAnimationSlideFromTop) {
+    }else if (animationOption == MNGModalAnimationSlideFromTop) {
         endFrame.origin.y = self.dimmingView.frame.origin.y-presentedViewController.view.frame.size.height;
-    }else if (equalityTest == MNGModalAnimationSlideFromRight) {
+    }else if (animationOption == MNGModalAnimationSlideFromRight) {
         endFrame.origin.x = self.dimmingView.frame.size.width;
-    }else if (equalityTest == MNGModalAnimationSlideFromLeft) {
+    }else if (animationOption == MNGModalAnimationSlideFromLeft) {
         endFrame.origin.x = self.dimmingView.frame.origin.x-presentedViewController.view.frame.size.width;
     }
     
+    BOOL shouldCoverNavBar = NO;
+    for (MNGModalLayer *layer in self.modalLayerStack) {
+        if (!(layer.options & MNGModalOptionShouldNotCoverNavigationBar)){
+            shouldCoverNavBar = YES;
+            break;
+        }
+    }
+    
     NSInteger dimmingYOrigin = self.dimmingView.frame.origin.y;
-    if ([self topModalLayer] && [[self topModalLayer] options] & MNGModalOptionShouldNotCoverNavigationBar) {
-        UIViewController *presentingVC = [[self topModalLayer] presentingViewController];
+    if ([self peekModalLayer] && !shouldCoverNavBar) {
+        UIViewController *presentingVC = [[self peekModalLayer] presentingViewController];
         dimmingYOrigin = presentingVC.navigationController ? [[presentingVC topLayoutGuide] length] : 0;
     }
     
+    BOOL shouldRemoveDim = YES;
+    for (MNGModalLayer *layer in self.modalLayerStack) {
+        if (layer.options & MNGModalOptionShouldDarken){
+            shouldRemoveDim = NO;
+            break;
+        }
+    }
+    
     void(^animationsBlock)() = ^() {
-        if (options & MNGModalOptionShouldDarken) {
-            UIView *dimmingView = [[MNGModalManager manager] dimmingView];
-            dimmingView.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0];
+        //this too
+        if (shouldRemoveDim) {
+            self.dimmingView.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0];
         }
         self.dimmingView.frame = CGRectMake(0, dimmingYOrigin, mainWindow.bounds.size.width, mainWindow.bounds.size.height-dimmingYOrigin);
-        if (equalityTest == MNGModalAnimationFade) {
+        if (animationOption == MNGModalAnimationFade) {
             presentedViewController.view.alpha = 0;
         }
         presentedViewController.view.frame = endFrame;
     };
     void(^completionBlock)() = ^() {
-        [presentedViewController.view willMoveToSuperview:nil];
         [presentedViewController.view removeFromSuperview];
-        [presentedViewController.view didMoveToSuperview];
         
-        if (![self topModalLayer]) {
+        if (![self peekModalLayer]) {
             [self.dimmingView removeFromSuperview];
             self.dimmingView = nil;
         }
@@ -224,7 +242,7 @@ static MNGModalManager *_manager = nil;
         }
     };
     
-    if (equalityTest == MNGModalAnimationNone) {
+    if (animationOption == MNGModalAnimationNone) {
         animationsBlock();
         completionBlock();
     }else{
@@ -239,7 +257,7 @@ static MNGModalManager *_manager = nil;
 #pragma mark - protocol forwarding
 - (void)tapGestureDetected:(UITapGestureRecognizer *)tapGestureRecognizer
 {
-    MNGModalLayer *topLayer = [self topModalLayer];
+    MNGModalLayer *topLayer = [self peekModalLayer];
     if ([topLayer.delegate respondsToSelector:@selector(tapDetectedOutsideModal:)]) {
         [topLayer.delegate tapDetectedOutsideModal:tapGestureRecognizer];
     }

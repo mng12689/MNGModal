@@ -56,7 +56,7 @@
 - (void)presentNextModal
 {
     PresentedViewController *nextVC = [PresentedViewController new];
-    [self presentViewController:nextVC frame:self.view.frame options:MNGModalAnimationSlideFromBottom completion:nil];
+    [self presentViewController:nextVC frame:self.view.frame options:MNGModalAnimationSlideFromBottom|MNGModalOptionShouldNotCoverNavigationBar completion:nil];
 }
 
 @end
