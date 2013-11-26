@@ -43,7 +43,7 @@
     NSInteger spacing = 10;
     
     UIButton *presentButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2-buttonWidth/2,
-                                                                        2*spacing,
+                                                                        80,
                                                                         buttonWidth,
                                                                         buttonHeight)];
     [presentButton setTitle:@"Present Modal" forState:UIControlStateNormal];
