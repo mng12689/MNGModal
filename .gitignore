@@ -1,0 +1,25 @@
+
+# Root level files
+.DS_Store
+.svn
+profile
+*~.nib
+.cshrc
+*.swp
+*~
+MNGModal/.DS_Store
+MNGModalTests/.DS_Store
+
+# Project files
+MNGModal.xcodeproj/xcuserdata/*
+MNGModal.xcodeproj/project.xcworkspace/xcuserdata/*
+
+
+# Build files
+build/
+Headers/
+*.perspective
+*.perspective3
+*.pbxuser
+*.mode1v3
+*.mode2v3
