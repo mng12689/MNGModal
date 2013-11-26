@@ -12,9 +12,15 @@
 
 @interface UIViewController (CustomModals)
 
--(void)presentViewController:(UIViewController *)viewControllerToPresent frame:(CGRect)frame options:(MNGModalViewControllerOptions)options completion:(void (^)(void))completion;
+-(void)presentViewController:(UIViewController *)viewControllerToPresent
+                       frame:(CGRect)frame options:(MNGModalViewControllerOptions)options
+                  completion:(void (^)(void))completion;
 
--(void)presentViewController:(UIViewController *)viewControllerToPresent frame:(CGRect)frame options:(MNGModalViewControllerOptions)options completion:(void (^)(void))completion delegate:(id <MNGModalProtocol>)delegate;
+-(void)presentViewController:(UIViewController *)viewControllerToPresent
+                       frame:(CGRect)frame
+                     options:(MNGModalViewControllerOptions)options
+                  completion:(void (^)(void))completion
+                    delegate:(id <MNGModalProtocol>)delegate;
 
 - (void)dismissModalViewControllerWithCompletion:(void (^)(void))completion;
 
