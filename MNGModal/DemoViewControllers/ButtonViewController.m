@@ -17,6 +17,7 @@
 @property (nonatomic,strong) NSArray *animationOptions;
 
 @property (nonatomic,assign) BOOL shouldDarken;
+@property (nonatomic,assign) BOOL shouldntCoverNav;
 
 @end
 
@@ -38,7 +39,9 @@
 {
     [super viewDidLoad];
     
-    NSInteger buttonWidth = 150;
+    self.view.backgroundColor = [UIColor whiteColor];
+    
+    NSInteger buttonWidth = 250;
     NSInteger buttonHeight = 50;
     NSInteger spacing = 10;
     
@@ -53,12 +56,13 @@
     [self.view addSubview:presentButton];
     
     
-    NSArray *items = @[@"None", @"Fade", @"From Left", @"From Right", @"From Bottom", @"From Top"];
+    NSArray *items = @[@"None", @"Fade", @"Left", @"Right", @"Bottom", @"Top"];
     self.segControl = [[UISegmentedControl alloc]initWithItems:items];
     self.segControl.frame = CGRectMake(spacing,
                                   presentButton.frame.origin.y+presentButton.frame.size.height+spacing,
                                   self.view.frame.size.width-spacing-spacing,
                                   presentButton.frame.size.height);
+    self.segControl.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [self.view addSubview:self.segControl];
     
     UIButton *shouldDarkenButton = [UIButton new];
@@ -75,20 +79,38 @@
     shouldDarkenButton.layer.borderWidth = 1;
     [shouldDarkenButton addTarget:self action:@selector(toggleShouldDarken:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:shouldDarkenButton];
+    
+    UIButton *shouldCoverNavButton = [UIButton new];
+    shouldCoverNavButton.frame = CGRectMake(shouldDarkenButton.frame.origin.x+shouldDarkenButton.frame.size.width+spacing,
+                                            shouldDarkenButton.frame.origin.y,
+                                            buttonWidth,
+                                            self.segControl.frame.size.height);
+    [shouldCoverNavButton setTitle:@"Shouldn't Cover Nav" forState:UIControlStateNormal];
+    [shouldCoverNavButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [shouldCoverNavButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+    [shouldCoverNavButton setBackgroundColor:[UIColor whiteColor]];
+    shouldCoverNavButton.layer.cornerRadius = 3;
+    shouldCoverNavButton.layer.borderColor = [UIColor blueColor].CGColor;
+    shouldCoverNavButton.layer.borderWidth = 1;
+    [shouldCoverNavButton addTarget:self action:@selector(toggleShouldntCoverNav:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:shouldCoverNavButton];
 }
 
 - (void)testCategory
 {
-    UIViewController *testVC = [PresentedViewController new];
+    UIViewController *testVC = [ButtonViewController new];
     
     NSUInteger index = self.segControl.selectedSegmentIndex;
     MNGModalViewControllerOptions options = [ButtonViewController animationOptionAtIndex:index];
     if (self.shouldDarken) {
         options = options|MNGModalOptionShouldDarken;
     }
+    if (self.shouldntCoverNav) {
+        options = options|MNGModalOptionShouldNotCoverNavigationBar;
+    }
     
     [self presentViewController:testVC
-                          frame:CGRectMake(200, 200, 300, 400)
+                          frame:CGRectMake(100, 100, 500, 900)
                         options:options
                      completion:nil
                        delegate:self];
@@ -128,6 +150,15 @@
     self.shouldDarken = !self.shouldDarken;
     UIButton *button = (UIButton*)sender;
     [button setSelected:self.shouldDarken];
+    UIColor *backgroundColor = button.selected ? [UIColor blueColor] : [UIColor whiteColor];
+    [button setBackgroundColor:backgroundColor];
+}
+
+- (void)toggleShouldntCoverNav:(id)sender
+{
+    self.shouldntCoverNav = !self.shouldntCoverNav;
+    UIButton *button = (UIButton*)sender;
+    [button setSelected:self.shouldntCoverNav];
     UIColor *backgroundColor = button.selected ? [UIColor blueColor] : [UIColor whiteColor];
     [button setBackgroundColor:backgroundColor];
 }
