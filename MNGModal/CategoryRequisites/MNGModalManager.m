@@ -88,7 +88,12 @@ static MNGModalManager *_manager = nil;
 }
 
 #pragma mark - modal presentation and dismissal methods
--(void)presentViewController:(UIViewController *)presentedViewController fromViewController:(UIViewController *)presentingViewController frame:(CGRect)frame options:(MNGModalViewControllerOptions)options completion:(void (^)(void))completion delegate:(id<MNGModalProtocol>)delegate
+-(void)presentViewController:(UIViewController *)presentedViewController
+          fromViewController:(UIViewController *)presentingViewController
+                       frame:(CGRect)frame
+                     options:(MNGModalViewControllerOptions)options
+                  completion:(void (^)(void))completion
+                    delegate:(id<MNGModalProtocol>)delegate
 {
     MNGModalLayer *topLayer = [self peekModalLayer];
     if (topLayer.presentingViewController == presentingViewController) {

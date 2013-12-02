@@ -17,6 +17,9 @@
 @property (nonatomic, assign) MNGModalViewControllerOptions options;
 @property (nonatomic, weak) id <MNGModalProtocol> delegate;
 
-+ (instancetype)layerWithPresentingViewController:(UIViewController*)presentingViewController presentedViewController:(UIViewController*)presentedViewController options:(MNGModalViewControllerOptions)options delegate:(id <MNGModalProtocol>)delegate;
++ (instancetype)layerWithPresentingViewController:(UIViewController*)presentingViewController
+                          presentedViewController:(UIViewController*)presentedViewController
+                                          options:(MNGModalViewControllerOptions)options
+                                         delegate:(id <MNGModalProtocol>)delegate;
 
 @end

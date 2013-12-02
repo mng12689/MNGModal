@@ -10,7 +10,10 @@
 
 @implementation MNGModalLayer
 
-+ (instancetype)layerWithPresentingViewController:(UIViewController *)presentingViewController presentedViewController:(UIViewController *)presentedViewController options:(MNGModalViewControllerOptions)options delegate:(id<MNGModalProtocol>)delegate
++ (instancetype)layerWithPresentingViewController:(UIViewController *)presentingViewController
+                          presentedViewController:(UIViewController *)presentedViewController
+                                          options:(MNGModalViewControllerOptions)options
+                                         delegate:(id<MNGModalProtocol>)delegate
 {
     MNGModalLayer *layer = [MNGModalLayer new];
     layer.presentingViewController = presentingViewController;
