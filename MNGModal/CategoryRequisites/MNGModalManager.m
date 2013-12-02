@@ -9,6 +9,7 @@
 #import "MNGModalManager.h"
 #import "MNGModalProtocol.h"
 #import "MNGModalLayer.h"
+#import "UIViewController+TopLayoutGuide.h"
 
 @interface MNGModalManager () <UIGestureRecognizerDelegate>
 
@@ -117,7 +118,7 @@ static MNGModalManager *_manager = nil;
         }else{
             // if no modal in the stack has yet covered the nav bar, and the presentingVC doesn't want this modal to cover the
             // nav bar either, then take into account the nav bar when framing the dimming view
-            dimmingYOrigin = presentingViewController.navigationController ? [[presentingViewController topLayoutGuide] length] : 0;
+            dimmingYOrigin = presentingViewController.navigationController ? [presentingViewController safety_topLayoutGuideLength] : 0;
         }
     }
     // we dont want to animate the frame of the dimming view for the first modal, so we set it before the animation block
@@ -213,7 +214,7 @@ static MNGModalManager *_manager = nil;
     NSInteger dimmingYOrigin = self.dimmingView.frame.origin.y;
     if ([self peekModalLayer] && !shouldCoverNavBar) {
         UIViewController *presentingVC = [[self peekModalLayer] presentingViewController];
-        dimmingYOrigin = presentingVC.navigationController ? [[presentingVC topLayoutGuide] length] : 0;
+        dimmingYOrigin = presentingVC.navigationController ? [presentingVC safety_topLayoutGuideLength] : 0;
     }
     
     BOOL shouldRemoveDim = YES;
