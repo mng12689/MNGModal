@@ -127,13 +127,13 @@ static MNGModalManager *_manager = nil;
     NSUInteger animationOption =  (7 << 2) & options;
     
     if (animationOption == MNGModalAnimationSlideFromBottom) {
-        startFrame.origin.y = dimmingView.frame.size.height;
+        startFrame.origin.y = [UIScreen mainScreen].bounds.size.height;
     }else if (animationOption == MNGModalAnimationSlideFromTop) {
-        startFrame.origin.y = dimmingView.frame.origin.y-presentedViewController.view.frame.size.height;
+        startFrame.origin.y = -presentedViewController.view.frame.size.height;
     }else if (animationOption == MNGModalAnimationSlideFromRight) {
-        startFrame.origin.x = dimmingView.frame.size.width;
+        startFrame.origin.x = [UIScreen mainScreen].bounds.size.width;
     }else if (animationOption == MNGModalAnimationSlideFromLeft) {
-        startFrame.origin.x = dimmingView.frame.origin.x-presentedViewController.view.frame.size.width;
+        startFrame.origin.x = -presentedViewController.view.frame.size.width;
     }
     presentedViewController.view.frame = startFrame;
     

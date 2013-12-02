@@ -109,7 +109,7 @@
     }
     
     [self presentViewController:testVC
-                          frame:CGRectMake(100, 100, 500, 900)
+                          frame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
                         options:options
                      completion:nil
                        delegate:self];
