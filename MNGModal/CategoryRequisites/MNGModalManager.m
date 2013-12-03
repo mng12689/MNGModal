@@ -16,9 +16,6 @@
 @property (nonatomic, strong) UIView *dimmingView;
 @property (nonatomic, strong) NSMutableArray *modalLayerStack;
 
-// need this reference to determine where the nav bar is
-@property (nonatomic, strong) UIViewController *originalPresentingViewController;
-
 @end
 
 @implementation MNGModalManager
@@ -74,6 +71,7 @@ static MNGModalManager *_manager = nil;
 #pragma mark - overriden getters
 - (UIViewController *)originalPresentingViewController
 {
+    // need this reference to determine where the nav bar is
     return [[self.modalLayerStack firstObject] presentingViewController];
 }
 
@@ -127,7 +125,7 @@ static MNGModalManager *_manager = nil;
             }
         }
         if (!navAlreadyCovered) {
-            UIViewController *originalPresentingVC = self.originalPresentingViewController ? : presentingViewController;
+            UIViewController *originalPresentingVC = [self originalPresentingViewController] ? : presentingViewController;
             dimmingYOrigin = originalPresentingVC.navigationController ? [originalPresentingVC safety_topLayoutGuideLength] : 0;
         }
     }
@@ -231,7 +229,7 @@ static MNGModalManager *_manager = nil;
     
     NSInteger dimmingYOrigin = self.dimmingView.frame.origin.y;
     if ([self peekModalLayer] && !shouldCoverNavBar) {
-        dimmingYOrigin = self.originalPresentingViewController.navigationController ? [self.originalPresentingViewController safety_topLayoutGuideLength] : 0;
+        dimmingYOrigin = [self originalPresentingViewController].navigationController ? [[self originalPresentingViewController] safety_topLayoutGuideLength] : 0;
     }
     
     BOOL shouldRemoveDim = YES;
