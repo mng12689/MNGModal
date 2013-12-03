@@ -68,6 +68,13 @@ static MNGModalManager *_manager = nil;
     return _modalLayerStack;
 }
 
+#pragma mark - overriden getters
+- (UIViewController *)originalPresentingViewController
+{
+    // need this reference to determine where the nav bar is
+    return [[self.modalLayerStack firstObject] presentingViewController];
+}
+
 #pragma mark - modal layer stack methods
 - (void)pushModalLayer:(MNGModalLayer *)layer
 {
@@ -107,14 +114,19 @@ static MNGModalManager *_manager = nil;
     UIView *dimmingView = self.dimmingView;
     
     CGFloat dimmingYOrigin = 0;
-    // if modal being presented should cover nav bar, cover it
-    if ((options & MNGModalOptionShouldNotCoverNavigationBar)) {
-        // else if the modal current top modal should cover the nav bar, ignore the presentingVC not covering the nav bar since the
-        // current top modal is covering it anyways
-        if (!topLayer || ([topLayer options] & MNGModalOptionShouldNotCoverNavigationBar)) {
-            // if no modal in the stack has yet covered the nav bar, and the presentingVC doesn't want this modal to cover the
-            // nav bar either, then take into account the nav bar when framing the dimming view
-            dimmingYOrigin = presentingViewController.navigationController ? [presentingViewController safety_topLayoutGuideLength] : 0;
+    if (options & MNGModalOptionShouldNotCoverNavigationBar) {
+
+        // MNGModalOptionShouldNotCoverNavigationBar option should be ignored if a modal layer behind this one already covers the nav bar
+        BOOL navAlreadyCovered = NO;
+        for (MNGModalLayer *layer in self.modalLayerStack) {
+            if (!(layer.options & MNGModalOptionShouldNotCoverNavigationBar)){
+                navAlreadyCovered = YES;
+                break;
+            }
+        }
+        if (!navAlreadyCovered) {
+            UIViewController *originalPresentingVC = [self originalPresentingViewController] ? : presentingViewController;
+            dimmingYOrigin = originalPresentingVC.navigationController ? [originalPresentingVC safety_topLayoutGuideLength] : 0;
         }
     }
     
@@ -127,13 +139,17 @@ static MNGModalManager *_manager = nil;
     NSUInteger animationOption =  (7 << 2) & options;
     
     if (animationOption == MNGModalAnimationSlideFromBottom) {
-        startFrame.origin.y = dimmingView.frame.size.height;
+        startFrame.origin.y = [UIScreen mainScreen].bounds.size.height;
     }else if (animationOption == MNGModalAnimationSlideFromTop) {
-        startFrame.origin.y = dimmingView.frame.origin.y-presentedViewController.view.frame.size.height;
+        startFrame.origin.y = -presentedViewController.view.frame.size.height;
     }else if (animationOption == MNGModalAnimationSlideFromRight) {
-        startFrame.origin.x = dimmingView.frame.size.width;
+        startFrame.origin.x = [UIScreen mainScreen].bounds.size.width;
+        startFrame.origin.y += dimmingYOrigin;
     }else if (animationOption == MNGModalAnimationSlideFromLeft) {
-        startFrame.origin.x = dimmingView.frame.origin.x-presentedViewController.view.frame.size.width;
+        startFrame.origin.x = -presentedViewController.view.frame.size.width;
+        startFrame.origin.y += dimmingYOrigin;
+    }else if (animationOption == MNGModalAnimationFade){
+        startFrame.origin.y += dimmingYOrigin;
     }
     presentedViewController.view.frame = startFrame;
     
@@ -155,7 +171,10 @@ static MNGModalManager *_manager = nil;
         }
         dimmingView.frame = CGRectMake(0, dimmingYOrigin, mainWindow.bounds.size.width, mainWindow.bounds.size.height-dimmingYOrigin);
         
-        presentedViewController.view.frame = frame;
+        CGRect presentedVCFrame = frame;
+        presentedVCFrame.origin.y += dimmingYOrigin;
+        presentedViewController.view.frame = presentedVCFrame;
+        
         presentedViewController.view.alpha = viewFinalAlpha;
     };
     
@@ -191,13 +210,13 @@ static MNGModalManager *_manager = nil;
     NSUInteger animationOption =  (7 << 2) & options;
     
     if (animationOption == MNGModalAnimationSlideFromBottom) {
-        endFrame.origin.y = self.dimmingView.frame.size.height;
+        endFrame.origin.y = [UIScreen mainScreen].bounds.size.height;
     }else if (animationOption == MNGModalAnimationSlideFromTop) {
-        endFrame.origin.y = self.dimmingView.frame.origin.y-presentedViewController.view.frame.size.height;
+        endFrame.origin.y = -presentedViewController.view.frame.size.height;
     }else if (animationOption == MNGModalAnimationSlideFromRight) {
-        endFrame.origin.x = self.dimmingView.frame.size.width;
+        endFrame.origin.x = [UIScreen mainScreen].bounds.size.width;
     }else if (animationOption == MNGModalAnimationSlideFromLeft) {
-        endFrame.origin.x = self.dimmingView.frame.origin.x-presentedViewController.view.frame.size.width;
+        endFrame.origin.x = -presentedViewController.view.frame.size.width;
     }
     
     BOOL shouldCoverNavBar = NO;
@@ -210,8 +229,7 @@ static MNGModalManager *_manager = nil;
     
     NSInteger dimmingYOrigin = self.dimmingView.frame.origin.y;
     if ([self peekModalLayer] && !shouldCoverNavBar) {
-        UIViewController *presentingVC = [[self peekModalLayer] presentingViewController];
-        dimmingYOrigin = presentingVC.navigationController ? [presentingVC safety_topLayoutGuideLength] : 0;
+        dimmingYOrigin = [self originalPresentingViewController].navigationController ? [[self originalPresentingViewController] safety_topLayoutGuideLength] : 0;
     }
     
     BOOL shouldRemoveDim = YES;

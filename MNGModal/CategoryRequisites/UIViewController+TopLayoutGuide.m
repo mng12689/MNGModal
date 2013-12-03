@@ -16,7 +16,7 @@
     if ([self respondsToSelector:@selector(topLayoutGuide)]) {
         length = [[self topLayoutGuide] length];
     }else{
-        length = self.navigationController.navigationBar.frame.size.height;
+        length = [[UIApplication sharedApplication] statusBarFrame].size.height+self.navigationController.navigationBar.frame.size.height;
     }
     return length;
 }
