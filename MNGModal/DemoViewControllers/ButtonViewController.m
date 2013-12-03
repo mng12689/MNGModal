@@ -98,6 +98,7 @@
 - (void)testCategory
 {
     UIViewController *testVC = [ButtonViewController new];
+    testVC.view.backgroundColor = [UIColor blueColor];
     
     NSUInteger index = self.segControl.selectedSegmentIndex;
     MNGModalViewControllerOptions options = [ButtonViewController animationOptionAtIndex:index];
@@ -109,7 +110,7 @@
     }
     
     [self presentViewController:testVC
-                          frame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
+                          frame:CGRectMake(0, 0, 500, 900)
                         options:options
                      completion:nil
                        delegate:self];
