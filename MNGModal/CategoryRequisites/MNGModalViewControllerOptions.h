@@ -33,7 +33,8 @@ typedef NS_OPTIONS(NSUInteger, MNGModalViewControllerOptions) {
      *  Note that when using this option, the tapDetectedOutsideModal: delegate method will not get fired. If a modal
      *  view controller with this option specified is presented on top of a modal view controller with this option
      *  not specified, the bottom modal view controller will intercept this touch, and the touch will not be forwarded
-     *  all the way to the view behind it.
+     *  all the way to the view behind it. If the bottom modal view controller implements the tapDetectedOutsideModal: 
+     *  delegate method and does not have this option specified, that delegate method will be fired.
      */
     MNGModalOptionAllowUserInteractionWithBackground    = 1 << 2,
     /**
