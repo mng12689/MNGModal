@@ -24,4 +24,6 @@
 
 - (void)dismissModalViewControllerWithCompletion:(void (^)(void))completion;
 
+- (UIViewController *)MNGPresentedViewController;
+
 @end

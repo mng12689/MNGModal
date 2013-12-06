@@ -43,4 +43,9 @@
     [[MNGModalManager manager] dismissModalViewControllerWithCompletion:completion];
 }
 
+- (UIViewController *)MNGPresentedViewController
+{
+    return [[MNGModalManager manager] MNGPresentedViewController];
+}
+
 @end

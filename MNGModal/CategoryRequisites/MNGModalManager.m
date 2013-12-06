@@ -68,6 +68,12 @@ static MNGModalManager *_manager = nil;
     return _modalLayerStack;
 }
 
+#pragma mark - layer info
+- (UIViewController *)MNGPresentedViewController
+{
+    return [[self peekModalLayer] presentedViewController];
+}
+
 #pragma mark - overriden getters
 - (UIViewController *)originalPresentingViewController
 {
