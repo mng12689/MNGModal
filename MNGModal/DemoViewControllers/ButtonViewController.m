@@ -17,6 +17,7 @@
 
 @property (nonatomic,assign) BOOL shouldDarken;
 @property (nonatomic,assign) BOOL shouldntCoverNav;
+@property (nonatomic,assign) BOOL allowUserInteraction;
 
 @end
 
@@ -46,10 +47,10 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    NSInteger buttonWidth = 250;
     NSInteger buttonHeight = 50;
     NSInteger spacing = 10;
-    
+    NSInteger buttonWidth = self.view.frame.size.width/3 - spacing*6;
+
     UIButton *presentButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2-buttonWidth/2,
                                                                         80,
                                                                         buttonWidth,
@@ -99,6 +100,22 @@
     shouldCoverNavButton.layer.borderWidth = 1;
     [shouldCoverNavButton addTarget:self action:@selector(toggleShouldntCoverNav:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:shouldCoverNavButton];
+    
+    UIButton *allowUserInteractionButton = [UIButton new];
+    allowUserInteractionButton.frame = CGRectMake(shouldCoverNavButton.frame.origin.x+shouldCoverNavButton.frame.size.width+spacing,
+                                            shouldCoverNavButton.frame.origin.y,
+                                            buttonWidth,
+                                            self.segControl.frame.size.height);
+    [allowUserInteractionButton setTitle:@"Allow BG Interaction" forState:UIControlStateNormal];
+    [allowUserInteractionButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [allowUserInteractionButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+    [allowUserInteractionButton setBackgroundColor:[UIColor whiteColor]];
+    allowUserInteractionButton.layer.cornerRadius = 3;
+    allowUserInteractionButton.layer.borderColor = [UIColor blueColor].CGColor;
+    allowUserInteractionButton.layer.borderWidth = 1;
+    [allowUserInteractionButton addTarget:self action:@selector(toggleAllowUserInteraction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:allowUserInteractionButton];
+
 }
 
 - (void)testCategory
@@ -115,8 +132,12 @@
         options = options|MNGModalOptionShouldNotCoverNavigationBar;
     }
     
+    if (self.allowUserInteraction) {
+        options = options|MNGModalOptionAllowUserInteractionWithBackground;
+    }
+    
     [self presentViewController:testVC
-                          frame:CGRectMake(0, 0, 500, 900)
+                          frame:CGRectMake(40, 40, 500, 600)
                         options:options
                      completion:nil
                        delegate:self];
@@ -165,6 +186,15 @@
     self.shouldntCoverNav = !self.shouldntCoverNav;
     UIButton *button = (UIButton*)sender;
     [button setSelected:self.shouldntCoverNav];
+    UIColor *backgroundColor = button.selected ? [UIColor blueColor] : [UIColor whiteColor];
+    [button setBackgroundColor:backgroundColor];
+}
+
+- (void)toggleAllowUserInteraction:(id)sender
+{
+    self.allowUserInteraction = !self.allowUserInteraction;
+    UIButton *button = (UIButton*)sender;
+    [button setSelected:self.allowUserInteraction];
     UIColor *backgroundColor = button.selected ? [UIColor blueColor] : [UIColor whiteColor];
     [button setBackgroundColor:backgroundColor];
 }

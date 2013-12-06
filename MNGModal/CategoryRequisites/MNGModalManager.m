@@ -135,8 +135,19 @@ static MNGModalManager *_manager = nil;
         dimmingView.frame = CGRectMake(0, dimmingYOrigin, mainWindow.bounds.size.width, mainWindow.bounds.size.height-dimmingYOrigin);
     }
     
+    if (options & MNGModalOptionAllowUserInteractionWithBackground) {
+        BOOL userInteractionEnabled = NO;
+        for (MNGModalLayer *layer in self.modalLayerStack) {
+            if (!(layer.options & MNGModalOptionAllowUserInteractionWithBackground)) {
+                userInteractionEnabled = YES;
+                break;
+            }
+        }
+        dimmingView.userInteractionEnabled = userInteractionEnabled;
+    }
+    
     CGRect startFrame = frame;
-    NSUInteger animationOption =  (7 << 2) & options;
+    NSUInteger animationOption =  (7 << 4) & options;
     
     if (animationOption == MNGModalAnimationSlideFromBottom) {
         startFrame.origin.y = [UIScreen mainScreen].bounds.size.height;
@@ -207,7 +218,7 @@ static MNGModalManager *_manager = nil;
     UIViewController *presentedViewController = layer.presentedViewController;
     
     CGRect endFrame = presentedViewController.view.frame;
-    NSUInteger animationOption =  (7 << 2) & options;
+    NSUInteger animationOption =  (7 << 4) & options;
     
     if (animationOption == MNGModalAnimationSlideFromBottom) {
         endFrame.origin.y = [UIScreen mainScreen].bounds.size.height;
@@ -238,6 +249,17 @@ static MNGModalManager *_manager = nil;
             shouldRemoveDim = NO;
             break;
         }
+    }
+    
+    if (options & MNGModalOptionAllowUserInteractionWithBackground) {
+        BOOL userInteractionEnabled = NO;
+        for (MNGModalLayer *layer in self.modalLayerStack) {
+            if (layer.options & MNGModalOptionAllowUserInteractionWithBackground) {
+                userInteractionEnabled = YES;
+                break;
+            }
+        }
+        self.dimmingView.userInteractionEnabled = userInteractionEnabled;
     }
     
     void(^animationsBlock)() = ^() {
