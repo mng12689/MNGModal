@@ -278,9 +278,11 @@ static MNGModalManager *_manager = nil;
         }
         presentedViewController.view.frame = endFrame;
     };
+    
+    NSInteger originalAlpha = presentedViewController.view.alpha;
     void(^completionBlock)() = ^() {
         [presentedViewController.view removeFromSuperview];
-        
+        presentedViewController.view.alpha = originalAlpha;
         if (![self peekModalLayer]) {
             [self.dimmingView removeFromSuperview];
             self.dimmingView = nil;

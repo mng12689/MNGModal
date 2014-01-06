@@ -5,34 +5,34 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>5966A052-B701-40E9-AEDD-950FE23C230D</string>
+	<string>7684A14E-27A7-490C-A4F9-07DF6ACF27D5</string>
 	<key>IDESourceControlProjectName</key>
 	<string>MNGModal</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>D25A7CC6-DCF1-4F3B-8536-4AA7047C5135</key>
-		<string>ssh://github.com/SRandazzo/MNGModal.git</string>
+		<key>6F46AA20-8874-45F6-A6BA-39B790594207</key>
+		<string>ssh://github.com/mng12689/MNGModal.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>MNGModal.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>D25A7CC6-DCF1-4F3B-8536-4AA7047C5135</key>
+		<key>6F46AA20-8874-45F6-A6BA-39B790594207</key>
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>ssh://github.com/SRandazzo/MNGModal.git</string>
+	<string>ssh://github.com/mng12689/MNGModal.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>D25A7CC6-DCF1-4F3B-8536-4AA7047C5135</string>
+	<string>6F46AA20-8874-45F6-A6BA-39B790594207</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>D25A7CC6-DCF1-4F3B-8536-4AA7047C5135</string>
+			<string>6F46AA20-8874-45F6-A6BA-39B790594207</string>
 			<key>IDESourceControlWCCName</key>
 			<string>MNGModal</string>
 		</dict>
