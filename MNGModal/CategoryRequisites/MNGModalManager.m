@@ -13,6 +13,7 @@
 
 @interface MNGModalManager () <UIGestureRecognizerDelegate>
 
+@property (nonatomic, strong) UIView *rootView;
 @property (nonatomic, strong) UIView *dimmingView;
 @property (nonatomic, strong) NSMutableArray *modalLayerStack;
 
@@ -29,6 +30,7 @@ static MNGModalManager *_manager = nil;
     {
         if (!_manager) {
             _manager = [[self alloc] init];
+            [[NSNotificationCenter defaultCenter] addObserver:_manager selector:@selector(orientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
         }
         return _manager;
     }
@@ -44,20 +46,39 @@ static MNGModalManager *_manager = nil;
     return nil;
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:_manager name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+}
+
 #pragma mark - lazy loaders
 - (UIView *)dimmingView
 {
     if (!_dimmingView) {
-        UIWindow *mainWindow = [[UIApplication sharedApplication].delegate window];
         _dimmingView = [UIView new];
-        _dimmingView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
         _dimmingView.backgroundColor = [UIColor clearColor];
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapGestureDetected:)];
         tap.delegate = self;
         [_dimmingView addGestureRecognizer:tap];
-        [mainWindow addSubview:_dimmingView];
+        _dimmingView.clipsToBounds = YES;
+        [self.rootView addSubview:_dimmingView];
     }
     return _dimmingView;
+}
+
+- (UIView *)rootView
+{
+    if (!_rootView) {
+        UIWindow *mainWindow = [[UIApplication sharedApplication].delegate window];
+        _rootView = [[UIView alloc] initWithFrame:mainWindow.bounds];
+        _rootView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+        _rootView.backgroundColor = [UIColor clearColor];
+        _rootView.clipsToBounds = YES;
+        _rootView.userInteractionEnabled = NO;
+        [MNGModalManager setOrientationForView:_rootView animated:NO];
+        [mainWindow addSubview:_rootView];
+    }
+    return _rootView;
 }
 
 - (NSMutableArray *)modalLayerStack
@@ -115,13 +136,12 @@ static MNGModalManager *_manager = nil;
         return;
     }
     
-    UIWindow *mainWindow = [[UIApplication sharedApplication].delegate window];
     UIColor *dimmedColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
     UIView *dimmingView = self.dimmingView;
     
     CGFloat dimmingYOrigin = 0;
     if (options & MNGModalOptionShouldNotCoverNavigationBar) {
-
+        
         // MNGModalOptionShouldNotCoverNavigationBar option should be ignored if a modal layer behind this one already covers the nav bar
         BOOL navAlreadyCovered = NO;
         for (MNGModalLayer *layer in self.modalLayerStack) {
@@ -138,7 +158,7 @@ static MNGModalManager *_manager = nil;
     
     // we dont want to animate the frame of the dimming view for the first modal, so we set it before the animation block
     if (!topLayer) {
-        dimmingView.frame = CGRectMake(0, dimmingYOrigin, mainWindow.bounds.size.width, mainWindow.bounds.size.height-dimmingYOrigin);
+        dimmingView.frame = CGRectMake(0, dimmingYOrigin, self.rootView.bounds.size.width, self.rootView.bounds.size.height-dimmingYOrigin);
     }
     
     if (options & MNGModalOptionAllowUserInteractionWithBackground) {
@@ -156,11 +176,11 @@ static MNGModalManager *_manager = nil;
     NSUInteger animationOption =  (7 << 4) & options;
     
     if (animationOption == MNGModalAnimationSlideFromBottom) {
-        startFrame.origin.y = [UIScreen mainScreen].bounds.size.height;
+        startFrame.origin.y = self.rootView.frame.size.height;
     }else if (animationOption == MNGModalAnimationSlideFromTop) {
         startFrame.origin.y = -presentedViewController.view.frame.size.height;
     }else if (animationOption == MNGModalAnimationSlideFromRight) {
-        startFrame.origin.x = [UIScreen mainScreen].bounds.size.width;
+        startFrame.origin.x = self.rootView.frame.size.width;
         startFrame.origin.y += dimmingYOrigin;
     }else if (animationOption == MNGModalAnimationSlideFromLeft) {
         startFrame.origin.x = -presentedViewController.view.frame.size.width;
@@ -180,13 +200,13 @@ static MNGModalManager *_manager = nil;
                                                                     options:options
                                                                    delegate:delegate];
     [self pushModalLayer:layer];
-    [mainWindow addSubview:presentedViewController.view];
+    [self.rootView addSubview:presentedViewController.view];
     
     void(^animationsBlock)() = ^() {
         if (options & MNGModalOptionShouldDarken) {
             dimmingView.backgroundColor = dimmedColor;
         }
-        dimmingView.frame = CGRectMake(0, dimmingYOrigin, mainWindow.bounds.size.width, mainWindow.bounds.size.height-dimmingYOrigin);
+        dimmingView.frame = CGRectMake(0, dimmingYOrigin, self.rootView.bounds.size.width, self.rootView.bounds.size.height-dimmingYOrigin);
         
         CGRect presentedVCFrame = frame;
         presentedVCFrame.origin.y += dimmingYOrigin;
@@ -219,7 +239,6 @@ static MNGModalManager *_manager = nil;
         return;
     }
     
-    UIWindow *mainWindow = [[UIApplication sharedApplication].delegate window];
     MNGModalViewControllerOptions options = layer.options;
     UIViewController *presentedViewController = layer.presentedViewController;
     
@@ -272,7 +291,7 @@ static MNGModalManager *_manager = nil;
         if (shouldRemoveDim) {
             self.dimmingView.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0];
         }
-        self.dimmingView.frame = CGRectMake(0, dimmingYOrigin, mainWindow.bounds.size.width, mainWindow.bounds.size.height-dimmingYOrigin);
+        self.dimmingView.frame = CGRectMake(0, dimmingYOrigin, self.rootView.bounds.size.width, self.rootView.bounds.size.height-dimmingYOrigin);
         if (animationOption == MNGModalAnimationFade) {
             presentedViewController.view.alpha = 0;
         }
@@ -286,6 +305,8 @@ static MNGModalManager *_manager = nil;
         if (![self peekModalLayer]) {
             [self.dimmingView removeFromSuperview];
             self.dimmingView = nil;
+            [self.rootView removeFromSuperview];
+            self.rootView = nil;
         }
         if (completion) {
             completion();
@@ -317,6 +338,36 @@ static MNGModalManager *_manager = nil;
 {
     UIView *view = [self.dimmingView hitTest:[touch locationInView:self.dimmingView] withEvent:nil];
     return view == self.dimmingView ? YES : NO;
+}
+
+#pragma mark - Device orientation
+- (void)orientationChanged:(NSNotification *)notification
+{
+    [MNGModalManager setOrientationForView:self.rootView animated:YES];
+}
+
++ (void)setOrientationForView:(UIView *)view animated:(BOOL)animated
+{
+    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    CGFloat angle = UIInterfaceOrientationAngleOfOrientation(orientation);
+    
+    CGAffineTransform transform = CGAffineTransformMakeRotation(angle);
+    if (!animated) {
+        view.transform = transform;
+    } else {
+        [UIView animateWithDuration:.3 animations:^{
+            view.transform = transform;
+        }];
+    }
+}
+
+CGFloat UIInterfaceOrientationAngleOfOrientation(UIInterfaceOrientation orientation){
+    switch (orientation){
+        case UIInterfaceOrientationPortraitUpsideDown: return M_PI;
+        case UIInterfaceOrientationLandscapeLeft: return -M_PI_2;
+        case UIInterfaceOrientationLandscapeRight: return M_PI_2;
+        default: return 0.0;
+    }
 }
 
 @end
