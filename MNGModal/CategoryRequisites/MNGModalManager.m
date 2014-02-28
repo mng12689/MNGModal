@@ -57,9 +57,6 @@ static MNGModalManager *_manager = nil;
     if (!_dimmingView) {
         _dimmingView = [UIView new];
         _dimmingView.backgroundColor = [UIColor clearColor];
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapGestureDetected:)];
-        tap.delegate = self;
-        [_dimmingView addGestureRecognizer:tap];
         _dimmingView.clipsToBounds = YES;
         [self.rootView addSubview:_dimmingView];
     }
@@ -74,7 +71,9 @@ static MNGModalManager *_manager = nil;
         _rootView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
         _rootView.backgroundColor = [UIColor clearColor];
         _rootView.clipsToBounds = YES;
-        _rootView.userInteractionEnabled = NO;
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapGestureDetected:)];
+        tap.delegate = self;
+        [_rootView addGestureRecognizer:tap];
         [MNGModalManager setOrientationForView:_rootView animated:NO];
         [mainWindow addSubview:_rootView];
     }
@@ -170,6 +169,7 @@ static MNGModalManager *_manager = nil;
             }
         }
         dimmingView.userInteractionEnabled = userInteractionEnabled;
+        self.rootView.userInteractionEnabled = userInteractionEnabled;
     }
     
     CGRect startFrame = frame;
@@ -336,7 +336,7 @@ static MNGModalManager *_manager = nil;
 #pragma mark - Tap Gesture delegate methods
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
-    UIView *view = [self.dimmingView hitTest:[touch locationInView:self.dimmingView] withEvent:nil];
+    UIView *view = [self.rootView hitTest:[touch locationInView:self.rootView] withEvent:nil];
     return view == self.dimmingView ? YES : NO;
 }
 
