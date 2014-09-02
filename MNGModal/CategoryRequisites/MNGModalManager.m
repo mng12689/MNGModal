@@ -11,9 +11,24 @@
 #import "MNGModalLayer.h"
 #import "UIViewController+TopLayoutGuide.h"
 
+@interface MNGRootView : UIView
+
+@property (nonatomic, assign) CGRect validRect;
+
+@end
+
+@implementation MNGRootView
+
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
+{
+    return CGRectContainsPoint(self.validRect, point);
+}
+
+@end
+
 @interface MNGModalManager () <UIGestureRecognizerDelegate>
 
-@property (nonatomic, strong) UIView *rootView;
+@property (nonatomic, strong) MNGRootView *rootView;
 @property (nonatomic, strong) UIView *dimmingView;
 @property (nonatomic, strong) NSMutableArray *modalLayerStack;
 
@@ -67,10 +82,11 @@ static MNGModalManager *_manager = nil;
 {
     if (!_rootView) {
         UIWindow *mainWindow = [[UIApplication sharedApplication].delegate window];
-        _rootView = [[UIView alloc] initWithFrame:mainWindow.bounds];
+        _rootView = [[MNGRootView alloc] initWithFrame:mainWindow.bounds];
         _rootView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
         _rootView.backgroundColor = [UIColor clearColor];
         _rootView.clipsToBounds = YES;
+        _rootView.layer.zPosition = 200;
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapGestureDetected:)];
         tap.delegate = self;
         [_rootView addGestureRecognizer:tap];
@@ -169,7 +185,7 @@ static MNGModalManager *_manager = nil;
             }
         }
         dimmingView.userInteractionEnabled = userInteractionEnabled;
-        self.rootView.userInteractionEnabled = userInteractionEnabled;
+        self.rootView.validRect = frame;
     }
     
     CGRect startFrame = frame;
@@ -285,6 +301,7 @@ static MNGModalManager *_manager = nil;
             }
         }
         self.dimmingView.userInteractionEnabled = userInteractionEnabled;
+        self.rootView.validRect = presentedViewController.view.frame;
     }
     
     void(^animationsBlock)() = ^() {
